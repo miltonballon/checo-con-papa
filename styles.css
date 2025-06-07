@@ -74,7 +74,7 @@ header.header-minimized * {
 }
 
 header.header-minimized::before {
-    content: "🇨🇿 Aprende Checo con Papá - Toca para volver al inicio";
+    content: attr(data-minimized-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,6 +98,14 @@ h1 {
     margin-bottom: 0.5rem;
     color: #4a5568;
     font-size: 2rem;
+}
+
+.student-greeting {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #667eea;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 .progress-indicator {
@@ -708,4 +716,103 @@ main {
         height: 30px;
         font-size: 0.7rem;
     }
+}
+
+/* Student Name Modal Styles */
+.student-name-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+}
+
+.student-name-modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.student-name-modal h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.student-name-modal p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.student-name-modal input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.student-name-modal input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.student-name-modal button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.student-name-modal button:hover:not(:disabled) {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.student-name-modal button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.student-name-modal button:active:not(:disabled) {
+    transform: translateY(0);
 }

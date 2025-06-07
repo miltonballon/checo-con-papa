@@ -42,6 +42,9 @@ class CzechLearningUI {
             console.log('Setting up scroll header hiding...');
             this.setupScrollHeaderHiding();
             
+            console.log('Updating student greeting...');
+            this.updateStudentGreeting();
+            
             console.log('Rendering navigation...');
             this.renderNavigation();
             
@@ -175,6 +178,10 @@ class CzechLearningUI {
         header.classList.remove('header-visible');
         header.classList.add('header-minimized');
         body.classList.remove('header-expanded');
+        
+        // Set personalized minimized content
+        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        header.setAttribute('data-minimized-text', `🇨🇿 ${studentName} está aprendiendo Checo - Toca para volver al inicio`);
     }
 
     expandHeader() {
@@ -184,6 +191,24 @@ class CzechLearningUI {
         header.classList.remove('header-minimized');
         header.classList.add('header-visible');
         body.classList.add('header-expanded');
+    }
+
+    updateStudentGreeting() {
+        const greetingElement = document.getElementById('student-greeting');
+        if (greetingElement && window.app) {
+            const studentName = window.app.getStudentName();
+            const greetings = [
+                `¡Hola ${studentName}! 👋`,
+                `¡Bienvenido ${studentName}! 🌟`,
+                `¡Hola ${studentName}! Vamos a aprender checo 📚`,
+                `¡Hola ${studentName}! ¿Listo para practicar? 🎯`
+            ];
+            
+            // Use a greeting based on the day of the week to add variety
+            const dayIndex = new Date().getDay();
+            const greetingIndex = dayIndex % greetings.length;
+            greetingElement.textContent = greetings[greetingIndex];
+        }
     }
 
     showNotification(message) {
@@ -285,9 +310,11 @@ class CzechLearningUI {
         const progressIndicator = document.getElementById('progress-indicator');
         if (!progressIndicator) return;
         
+        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        
         progressIndicator.innerHTML = `
             <div>
-                Lección ${progress.currentSection} de ${progress.totalSections} • 
+                Progreso de ${studentName}: Lección ${progress.currentSection} de ${progress.totalSections} • 
                 ${progress.completedSections} completadas (${progress.progressPercentage}%)
             </div>
             <div class="progress-bar">
@@ -301,6 +328,7 @@ class CzechLearningUI {
         
         const mainContent = document.getElementById('main-content');
         const canTakeExam = this.core.canTakeExam();
+        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
         
         mainContent.innerHTML = `
             <div class="section-content">
@@ -310,8 +338,8 @@ class CzechLearningUI {
                 </div>
                 <div class="exam-requirements">
                     ${!canTakeExam ? 
-                        '<div class="requirement-message">⚠️ Debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.</div>' : 
-                        '<div class="requirement-message success">✅ ¡Excelente! Has completado todos los requisitos de pronunciación.</div>'
+                        `<div class="requirement-message">⚠️ ${studentName}, debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.</div>` : 
+                        `<div class="requirement-message success">✅ ¡Excelente, ${studentName}! Has completado todos los requisitos de pronunciación.</div>`
                     }
                 </div>
                 <button class="exam-button" id="start-exam-btn" ${!canTakeExam ? 'disabled' : ''}>
@@ -339,7 +367,8 @@ class CzechLearningUI {
                     this.core.startExam();
                 } else {
                     console.log('Exam not allowed - requirements not met');
-                    this.showNotification('Debes completar todos los requisitos de pronunciación primero.');
+                    const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+                    this.showNotification(`${studentName}, debes completar todos los requisitos de pronunciación primero.`);
                 }
             });
         } else {
@@ -466,11 +495,13 @@ class CzechLearningUI {
         
         // Show feedback message
         const confidenceInfo = result.confidence ? ` (Confianza: ${result.confidence.toFixed(1)}%)` : '';
+        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        
         const feedbackMessage = result.accuracy >= 90 ? 
-            '¡Excelente pronunciación!' : 
+            `¡Excelente pronunciación, ${studentName}! 🌟` : 
             result.accuracy >= 70 ? 
-            'Buena pronunciación, sigue practicando' : 
-            'Necesitas más práctica';
+            `Buena pronunciación, ${studentName}. ¡Sigue practicando! 💪` : 
+            `Sigue intentando, ${studentName}. ¡Tú puedes! 🎯`;
             
         this.showNotification(`${feedbackMessage} (${result.accuracy}%)${confidenceInfo}`);
         
@@ -487,6 +518,7 @@ class CzechLearningUI {
             const canTakeExam = this.core.canTakeExam();
             const examButton = document.getElementById('start-exam-btn');
             const requirementMessage = document.querySelector('.requirement-message');
+            const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
             
             if (examButton) {
                 examButton.disabled = !canTakeExam;
@@ -495,10 +527,10 @@ class CzechLearningUI {
             if (requirementMessage) {
                 if (canTakeExam) {
                     requirementMessage.className = 'requirement-message success';
-                    requirementMessage.innerHTML = '✅ ¡Excelente! Has completado todos los requisitos de pronunciación.';
+                    requirementMessage.innerHTML = `✅ ¡Excelente, ${studentName}! Has completado todos los requisitos de pronunciación.`;
                 } else {
                     requirementMessage.className = 'requirement-message';
-                    requirementMessage.innerHTML = '⚠️ Debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.';
+                    requirementMessage.innerHTML = `⚠️ ${studentName}, debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.`;
                 }
             }
         }, 100);
@@ -685,6 +717,8 @@ class CzechLearningUI {
 
     renderExamResults(results) {
         const mainContent = document.getElementById('main-content');
+        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        
         mainContent.innerHTML = `
             <div class="exam-results">
                 <div class="score ${results.passed ? 'passing' : 'failing'}">
@@ -692,8 +726,8 @@ class CzechLearningUI {
                 </div>
                 <div class="result-message">
                     ${results.passed ? 
-                        '¡Excelente! Has aprobado esta lección.' : 
-                        'Necesitas practicar más. Intenta de nuevo.'
+                        `¡Excelente trabajo, ${studentName}! 🎉 Has aprobado esta lección.` : 
+                        `${studentName}, necesitas practicar más. ¡No te rindas! 💪 Intenta de nuevo.`
                     }
                 </div>
                 <div class="result-buttons">
