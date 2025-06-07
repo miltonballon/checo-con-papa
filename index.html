@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende Checo con Papá</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="header-controls">
+                <button id="minimize-header" class="minimize-button" title="Minimizar header">⬆️</button>
+            </div>
+            <h1>🇨🇿 Aprende Checo con Papá</h1>
+            <div id="progress-indicator" class="progress-indicator">
+                <!-- Progress will be shown here -->
+            </div>
+            <nav id="section-nav" class="section-nav">
+                <button id="nav-toggle" class="nav-toggle">☰ Lecciones</button>
+                <div id="nav-menu" class="nav-menu">
+                    <!-- Navigation items will be populated by JavaScript -->
+                    <div class="nav-footer">
+                        <button id="reset-progress" class="reset-button" onclick="app.resetProgress()">
+                            🔄 Reiniciar Progreso
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <!-- Content will be dynamically loaded here -->
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

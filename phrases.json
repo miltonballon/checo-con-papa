@@ -1,0 +1,233 @@
+[
+      {
+        "section": "Saludo y presentación",
+        "items": [
+          ["Hola", "Ahoj", "ahoi"],
+          ["Mucho gusto", "Těší mě", "tyeshi mnye"],
+          ["¿Cómo te llamas?", "Jak se jmenuješ?", "yak se ymenuyesh"],
+          ["Me llamo Hanna", "Jmenuji se Hanna", "ymenuyi se Hanna"],
+          ["Me llamo Lenna", "Jmenuji se Lenna", "ymenuyi se Lenna"],
+          ["Me llamo Lukas", "Jmenuji se Lukas", "ymenuyi se Lukas"],
+          ["¿Y tú?", "A ty?", "a ti"],
+          ["¿Cuántos años tienes?", "Kolik ti je let?", "kolik ti ye let"],
+          ["Tengo 11 años", "Je mi 11 let", "ye mi yednatst let"],
+          ["Tengo 13 años", "Je mi 13 let", "ye mi trinatst let"],
+          ["Tengo 15 años", "Je mi 15 let", "ye mi patnátst let"]
+        ]
+      },
+      {
+        "section": "Cortesía y ayuda",
+        "items": [
+          ["Buenos días", "Dobré ráno", "dobre ráno"],
+          ["Buenas tardes", "Dobrý den", "dobri den"],
+          ["Buenas noches", "Dobrou noc", "dobrou nots"],
+          ["Por favor", "Prosím", "proseem"],
+          ["Gracias", "Děkuji", "dyekuyi"],
+          ["Buen provecho", "Dobrou chuť", "dobrou jut"],
+          ["De nada", "Není zač", "neni zatch"],
+          ["Perdón", "Promiň", "promiñ"],
+          ["Disculpe", "Omlouvám se", "omlouvam se"],
+          ["Con permiso", "S dovolením", "s dovolením"],
+          ["¿Puedo ir al baño?", "Mohu jít na záchod?", "mohu yit na zájod"],
+          ["¿Cómo estás?", "Jak se máš?", "yak se mash"],
+          ["¿Cómo te va?", "Jak ti jde?", "yak ti yde"],
+          ["Muy bien", "Velmi dobře", "velmi dobre"],
+          ["Gracias", "Děkuji", "dyekuyi"],
+          ["Me alegra conocerte", "Rád tě poznávám", "rád/a tye poznávám (ráda si quien lo dice es mujer)"],
+          ["Igualmente (también me alegra conocerte)", "Také mě těší", "Také mnye tyeshi"],
+          ["Hasta luego", "Nashledanou", "nashledanou"],
+          ["Buen trabajo", "Dobrá práce", "dobrá prátse"],
+          ["Bien hecho", "Dobře udělané", "dobre udielané"]
+        ]
+      },
+      {
+        "section": "Instrucciones básicas",
+        "items": [
+          ["¿Podrías ayudarme, por favor?", "Mohl bys mi pomoci, prosím?", "mohl bis mi pomotsi, proseem"],
+          ["Sí", "Ano", "ano"],
+          ["No", "Ne", "ne"],
+          ["Escucha", "Poslouchej", "posloujei"],
+          ["Mira", "Podívej se", "podivei se"],
+          ["¡Cuidado!", "Pozor!", "pozor"],
+          ["Repite", "Opakuj", "opakui"],
+          ["Levanta la mano", "Zvedni ruku", "zvedni ruku"],
+          ["Levanta la mano derecha", "Zvedni pravou ruku", "zvedni pravou ruku"],
+          ["Siéntate", "Posaď se", "posach se"],
+          ["Ven aquí", "Pojď sem", "poyt sem"],
+          ["Ve allí", "Jdi tam", "ydi tam"],
+          ["Mira a la cámara", "Podívej se do kamery", "podivei se do kameri"],
+          ["Pásame eso por favor", "Podej mi to, prosím", "podei mi to, proseem"],
+          ["Ten cuidado", "Dávej pozor", "davei pozor"],
+          ["Tal vez", "Možná", "mozhna"]
+        ]
+      },
+      {
+        "section": "Información de la familia",
+        "items": [
+          ["¿Quién es tu papá?", "Kdo je tvůj táta?", "kdo ye tvuy táta"],
+          ["Mi papá es Milton", "Můj táta je Milton", "muuy táta ye Milton"],
+          ["Mi mamá es Pamela", "Moje máma je Pamela", "moye máma ye Pamela"],
+          ["Mi hermano es Lukas", "Můj bratr je Lukas", "muuy bratr ye Lukas"],
+          ["Mis hermanas son Hanna y Lenna", "Moje sestry jsou Hanna a Lenna", "moye sestri jsou Hanna a Lenna"],
+          ["Ella es mi hermana", "Ona je moje sestra", "ona ye moye sestra"],
+          ["Él es mi primo", "On je můj bratranec", "on ye muuy bratranets"],
+          ["¿Quién es tu abuela?", "Kdo je tvoje babička?", "kdo ye tvoie babichka"],
+          ["Mi abuelita es Yarka", "Moje babička je Yarka", "moye babichka ye Yarka"],
+          ["¿Quién es tu tía?", "Kdo je tvoje teta?", "kdo ye tvoie teta"],
+          ["Mi tía es Helen", "Moje teta je Helen", "moye teta ye Helen"],
+          ["Mi prima es Samantha", "Moje sestřenice je Samantha", "moye sestrenitse ye Samantha"],
+          ["Son mis parientes", "Jsou to moji příbuzní", "jsou to moyi przhíbužni"],
+          ["Los quiero mucho", "Mám je moc rád", "mám ye mots rád (rádá si quien lo dice es mujer)"],
+          ["¿Tienes mascotas?", "Máš domácího mazlíčka?", "mash domátsího mazlíčka"],
+          ["Tengo una mascota", "Mám domácího mazlíčka", "mám domátsího mazlíčka"],
+          ["Tengo un perro", "Mám psa", "mám psa"],
+          ["Tengo una familia grande", "Mám velkou rodinu", "mám velkuu rodinu"]
+        ]
+      },
+      {
+        "section": "El colegio",
+        "items": [
+            ["¿En qué colegio estudias?", "Na které škole studuješ?", "na ktere shkole studuyesh"],
+            ["¿En qué curso estás?", "V jaké třídě jsi?", "v yaké trzhidye ysi"],
+            ["¿Cómo se llaman tus amigos?", "Jak se jmenují tvoji kamarádi?", "yak se ymenuyi tvoi kamaradi"],
+            ["¿Qué te gusta hacer?", "Co rád/a děláš?", "so rád/a dyelash"],
+            ["Estudio en el colegio Hughes", "Studuji na škole Hughes", "studuyi na shkole Hughes"],
+            ["Estoy en 6to grado", "Jsem v šesté třídě", "ysem f shesté trzhidye"],
+            ["Estoy en 8vo grado", "Jsem v osmé třídě", "ysem v osmé trzhidye"],
+            ["Estoy en 10mo grado", "Jsem v desáté třídě", "ysem v desáté trzhidye"],
+            ["Me gusta estudiar", "Rád/a studuji", "rád/a studuyi"],
+            ["Tengo muchos amigos", "Mám mnoho přátel", "mám mnoho przhatel"],
+            ["Mi amiga se llama Andrea", "Moje kamarádka se jmenuje Andrea", "moye kamarátka se ymenuye Andrea"],
+            ["Mi amigo se llama Gregori", "Můj kamarád se jmenuje Gregori", "muuy kamarát se ymenuye Gregori"],
+            ["Aprendo a tocar piano", "Učím se hrát na klavír", "uchím se hrat na klavír"]
+        ]
+      },
+      {
+        "section": "Direcciones y transporte",
+        "items": [
+            ["Ve hacia la izquierda", "Jdi doleva", "ydi doleva"],
+            ["Luego, gira hacia la derecha", "Potom zahni doprava", "potom zahni doprava"],
+            ["Sigue de frente", "Jdi rovně", "ydi rovnye"],
+            ["Toma el autobus en la parada", "Nastup do autobusu na zastávce", "nastup do autobusu na zastávtse"],
+            ["Busca el metro", "Najdi metro", "naydi metro"],
+            ["Camina hasta llegar a la plaza", "Jdi pěšky na náměstí", "ydi pyeshki na námyesti"],
+            ["Debemos cruzar la calle", "Musíme přejít ulici", "musíme przheyit ulitsi"],
+            ["Debemos esperar en la parada", "Musíme čekat na zastávce", "musíme tchekat na zastávtse"],
+            ["El bus pasa a las 15:05", "Autobus jede v 15:05", "autobus yede f patnáct nula pět"],
+            ["¿Dónde están los baños?", "Kde jsou toalety?", "kde ysou toaleti"],
+            ["Al fondo, a la izquierda", "Na konci doleva", "na kontsi doleva"],
+            ["Sigue recto y a tu derecha encontrarás la puerta", "Jdi rovně a napravo najdeš dveře", "ydi rovnye a napravo naydesh dverhe"]
+        ]
+      },
+      {
+        "section": "Acciones en casa",
+        "items": [
+            ["¿Puedes abrir la puerta por favor?", "Můžeš prosím otevřít dveře?", "mujesh proseem otevřít dverhe"],
+            ["Claro que sí.", "Jistě.", "yishte"],
+            ["Cierra la puerta.", "Zavři dveře.", "zavři dverhe"],
+            ["Enseguida.", "Hned.", "hned"],
+            ["Abre la ventana.", "Otevři okno.", "otevři okno"],
+            ["Cierra la ventana.", "Zavři okno.", "zavři okno"],
+            ["Dame un momento por favor.", "Dej mi chvilku, prosím.", "dei mi jvilku, proseem"],
+            ["Hay que subir las escaleras.", "Musíme jít nahoru po schodech.", "musíme yit nahoru po sjodej"],
+            ["Llama al ascensor.", "Zavolej výtah.", "zavolei vítaj"],
+            ["Baja por las escaleras.", "Sejdi po schodech dolů.", "seydi po sjodej dolu"],
+            ["Por favor, levanta la mesa.", "Prosím, skliď stůl.", "proseem, sklitch stul"],
+            ["Hoy yo lavaré los platos.", "Dnes umyju nádobí.", "dnes umiyu nádobí"],
+            ["Ya me voy a dormir.", "Už jdu spát.", "ush ydu spat"],
+            ["Mañana hay que despertar temprano.", "Zítra musíme vstávat brzy.", "zítra musíme vstávat brzi"]
+        ]
+      },
+      {
+        "section": "Actividades y compras",
+        "items": [
+            ["Vamos a la tienda", "Pojďme do obchodu", "poydme do objodu"],
+            ["¿Cuánto cuesta esto?", "Kolik to stojí?", "kolik to stoyi"],
+            ["Son 150 coronas", "Je to 150 korun", "ye to sto padesát korun"],
+            ["Voy a comprar pan", "Koupím chléb", "koupím jléb"],
+            ["¿Podemos comprar refresco?", "Můžeme koupit limonádu?", "mujeme koupit limonádu"],
+            ["Pruébatelo", "Vyzkoušej si to", "viskoushei si to"],
+            ["Está bonito", "Je to hezké", "ye to heské"],
+            ["No me gusta", "Nelíbí se mi to", "nelíbí se mi to"],
+            ["Quiero ir a ver otras cosas", "Chci se podívat na jiné věci", "jtsi se podívat na yiné vietsi"],
+            ["¿Dónde está el probador?", "Kde je zkušební kabinka?", "kde ye skushební kabinka"],
+            ["Está por allá", "Je to tamhle", "ye to tamhle"],
+            ["Está barato", "Je to levné", "ye to levné"],
+            ["Está caro", "Je to drahé", "ye to drahé"],
+            ["Está en oferta", "Je to ve slevě", "ye to ve sleve"],
+            ["Hay que ir a la caja", "Musíme jít k pokladně", "musíme yit k pokladnye"],
+            ["Hay que ir al mostrador", "Musíme jít k pultu", "musíme yit k pultu"]
+        ]
+      },
+      {
+        "section": "Comida y bebida",
+        "items": [
+          ["Tengo hambre", "Mám hlad", "mám hlad"],
+          ["Tengo sed", "Mám žízeň", "mám yizhen"],
+          ["Quiero comer algo", "Chci něco sníst", "jtsi nyetso sníst"],
+          ["¿Qué hay para comer?", "Co máme k jídlu?", "so máme k yidlu"],
+          ["Me gusta la pizza", "Mám rád pizzu", "mám rád pítsu"],
+          ["Me gusta el helado", "Mám rád zmrzlinu", "mám rád zmrzlinu"],
+          ["Me gusta el chocolate", "Mám rád čokoládu", "mám rád chokoládu"],
+          ["Me gusta el agua", "Mám rád vodu", "mám rád vodu"],
+          ["Me gusta el jugo de naranja", "Mám rád pomerančový džus", "mám rád pomerančový dzhus"],
+          ["No me gusta el café", "Nemám rád kávu", "nemám rád kávu"]
+        ]
+      },
+      {
+        "section": "Diversión y entretenimiento",
+        "items": [
+            ["Me gusta jugar videojuegos", "Rád hraju videohry", "rád/a hrajui videohri"],
+            ["Me gusta ver películas", "Rád sleduji filmy", "rád/a sleduyui filmy"],
+            ["Me gusta escuchar música", "Rád poslouchám hudbu", "rád/a poslouchám hudbu"],
+            ["Me gusta bailar", "Rád tancuji", "rád/a tantsui"],
+            ["Me gusta pintar", "Rád maluji", "rád/a malui"],
+            ["Me gusta leer libros", "Rád čtu knihy", "rád/a chtu knihi"],
+            ["Vamos al parque de diversiones", "Pojďme do zábavního parku", "poydme do zábavnigo parku"],
+            ["Estoy de acuerdo", "Souhlasím", "soujlasím"],
+            ["Exacto!", "Přesně tak!", "przhesnye tak"],
+            ["Ya entendí", "Už jsem to pochopil/a", "ush ysem to pohopil/a"],
+            ["Me parece bien", "Zdá se mi to dobré", "zdá se mi to dobre"],
+            ["Eso no es verdad", "To není pravda", "to neni pravda"]
+        ]
+      }
+      ,
+      {
+        "section": "Preguntas comunes",
+        "items": [
+          ["¿Dónde está el baño?", "Kde je toaleta?", "kde ye toaleta"],
+          ["¿Qué hora es?", "Kolik je hodin?", "kolik ye hodín"],
+          ["¿Cómo te llamas?", "Jak se jmenuješ?", "yak se ymenuyesh"],
+          ["¿De dónde eres?", "Odkud jsi?", "odkut ysi"],
+          ["¿Hablas español?", "Mluvíš španělsky?", "mluvísh shpanelski"],
+          ["¿Puedes ayudarme?", "Můžeš mi pomoci?", "mujesh mi pomotsi"],
+          ["¿Cuánto cuesta?", "Kolik to stojí?", "kolik to stoyi"],
+          ["¿Qué significa esto?", "Co to znamená?", "so to znamená"],
+          ["¿Puedes repetir?", "Můžeš to zopakovat?", "mujesh to zopakovat"],
+          ["¿Dónde está la parada de autobús?", "Kde je autobusová zastávka?", "kde ye autobusová zastávka"]
+        ]
+      },
+      {
+        "section": "Vida diaria",
+        "items": [
+          ["Me levanto temprano", "Vstávám brzy", "vstávám brzi"],
+          ["Me cepillo los dientes", "Čistím si zuby", "chistím si zubi"],
+          ["Me visto", "Oblékám se", "oblekám se"],
+          ["Desayuno", "Snídám", "snidám"],
+          ["Voy a la escuela", "Jdu do školy", "ydu do shkoli"],
+          ["Hago la tarea", "Dělám úkoly", "dyelám ukoli"],
+          ["Juego con mis amigos", "Hraju si s kamarády", "hrajui si s kamaradi"],
+          ["Ceno con mi familia", "Večeřím s rodinou", "vecherzhím s rodinou"],
+          ["Me ducho", "Sprchuji se", "sprjuyui se"],
+          ["Me acuesto", "Jdu spát", "ydu spat"],
+          ["Se me está acabando la batería", "Dochází mi baterie", "dojkhází mi baterie"],
+          ["¿Cómo puedo conectarme al Wifi?", "Jak se můžu připojit na Wifi?", "yak se múzhu pripoyit na wifi"],
+          ["Me voy a duchar", "Jdu se sprchovat", "ydu se sprjovat"],
+          ["Vamos a desayunar", "Pojďme snídat", "poydme snídat"],
+          ["Voy a llamar a mis papás", "Zavolám rodičům", "zavolám rodichum"],
+          ["Me cepillaré los dientes", "Vyčistím si zuby", "vychistím si zubi"],
+          ["Voy a lavar la ropa", "Jdu prát prádlo", "ydu prat prádlo"],
+          ["¿Podemos lavar la ropa?", "Můžeme prát prádlo?", "mujeme prat prádlo"]
+        ]
+      }
+    ]
