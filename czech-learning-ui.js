@@ -9,6 +9,7 @@ class CzechLearningUI {
         this.lastScrollTop = 0;
         this.scrollThreshold = 10; // Minimum scroll distance to trigger hide/show
         this.headerHeight = 0;
+        this.isMinimized = false; // Track if header is minimized (manual or automatic)
         
         // Set up event callbacks
         console.log('Setting up core callbacks...');
@@ -114,13 +115,15 @@ class CzechLearningUI {
         
         minimizeButton.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent header click event
+            this.isMinimized = true; // Mark as minimized
             this.minimizeHeader();
         });
         
         // Add click listener to minimized header
         header.addEventListener('click', (e) => {
             if (header.classList.contains('header-minimized')) {
-                // Scroll to top and show full header
+                // Reset minimization flag and show full header
+                this.isMinimized = false;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.expandHeader();
             }
@@ -142,11 +145,12 @@ class CzechLearningUI {
                 
                 // Only act if we've scrolled more than the threshold
                 if (Math.abs(scrollDelta) > this.scrollThreshold) {
-                    if (scrollDelta > 0 && currentScrollTop > this.headerHeight) {
-                        // Scrolling down and past header height - minimize header
+                    if (scrollDelta > 0 && currentScrollTop > this.headerHeight && !header.classList.contains('header-minimized')) {
+                        // Scrolling down and past header height - minimize header (only if not already minimized)
+                        this.isMinimized = true; // Mark as minimized
                         this.minimizeHeader();
-                    } else if (scrollDelta < 0 || currentScrollTop <= 50) {
-                        // Scrolling up or near top - show full header
+                    } else if ((scrollDelta < 0 || currentScrollTop <= 50) && !this.isMinimized) {
+                        // Scrolling up or near top - show full header (only if not minimized)
                         this.expandHeader();
                     }
                     
@@ -160,11 +164,13 @@ class CzechLearningUI {
         // Add scroll event listener
         window.addEventListener('scroll', handleScroll, { passive: true });
         
-        // Also show full header when navigation is opened
+        // Also show full header when navigation is opened (only if not minimized)
         const navToggle = document.getElementById('nav-toggle');
         if (navToggle) {
             navToggle.addEventListener('click', () => {
-                this.expandHeader();
+                if (!this.isMinimized) {
+                    this.expandHeader();
+                }
             });
         }
         
@@ -181,7 +187,7 @@ class CzechLearningUI {
         
         // Set personalized minimized content
         const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
-        header.setAttribute('data-minimized-text', `🇨🇿 ${studentName} está aprendiendo Checo - Toca para volver al inicio`);
+        header.setAttribute('data-minimized-text', `🇨🇿 ${studentName} está aprendiendo Checo - Toca para ver tu progreso`);
     }
 
     expandHeader() {
