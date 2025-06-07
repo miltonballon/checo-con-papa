@@ -625,44 +625,10 @@ class CzechLearningUI {
         
         // Auto-play audio for Czech-to-Spanish questions
         if (question.type === 'czech-to-spanish') {
-            this.showAutoPlayMessage();
             setTimeout(() => {
                 this.playAudio(question.question);
             }, 300);
         }
-    }
-
-    showAutoPlayMessage() {
-        const autoPlayMessage = document.createElement('div');
-        autoPlayMessage.className = 'auto-play-message';
-        autoPlayMessage.innerHTML = '🎵 Reproduciendo automáticamente...';
-        autoPlayMessage.style.cssText = `
-            text-align: center;
-            color: #667eea;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        `;
-        
-        const questionContainer = document.querySelector('.question-container');
-        const questionAudio = questionContainer.querySelector('.question-audio');
-        questionContainer.insertBefore(autoPlayMessage, questionAudio);
-        
-        // Fade in the message
-        setTimeout(() => {
-            autoPlayMessage.style.opacity = '1';
-        }, 100);
-        
-        // Remove auto-play message after audio starts
-        setTimeout(() => {
-            autoPlayMessage.style.opacity = '0';
-            setTimeout(() => {
-                if (autoPlayMessage.parentNode) {
-                    autoPlayMessage.parentNode.removeChild(autoPlayMessage);
-                }
-            }, 300);
-        }, 1000);
     }
 
     handleAnswerSelection(selectedOption, question) {
