@@ -500,7 +500,23 @@ class CzechLearningCore {
                 console.log('=== SPEECH RECOGNITION ENDED ===');
                 console.log('Recording state before end:', this.isRecording);
                 console.log('================================');
-                this.isRecording = false;
+                
+                // If we were recording but no result was processed (timeout case)
+                if (this.isRecording) {
+                    this.isRecording = false;
+                    console.log('Recognition ended due to timeout, notifying UI...');
+                    
+                    // Notify UI that recording has ended without a result
+                    if (this.onPronunciationResult) {
+                        this.onPronunciationResult({
+                            error: true,
+                            message: 'Tiempo de grabación agotado. Intenta hablar más claro.',
+                            isTimeout: true
+                        });
+                    }
+                } else {
+                    this.isRecording = false;
+                }
             };
             
             return true;
@@ -553,6 +569,9 @@ class CzechLearningCore {
 
     processPronunciationResult(transcript, confidence = 0) {
         console.log('=== PROCESSING PRONUNCIATION ===');
+        
+        // Ensure recording state is properly reset
+        this.isRecording = false;
         
         const { sectionIndex, phraseIndex } = this.currentPronunciationPhrase;
         const phrase = this.phrases[sectionIndex].items[phraseIndex];
