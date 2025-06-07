@@ -251,6 +251,13 @@ class CzechLearningCore {
     }
 
     selectAnswer(selectedOption) {
+        // Check if this question has already been answered
+        const existingAnswer = this.examAnswers.find(answer => answer.question === this.currentQuestion);
+        if (existingAnswer) {
+            console.log('Question already answered, ignoring new selection');
+            return null; // Return null to indicate the answer was rejected
+        }
+
         const question = this.examQuestions[this.currentQuestion];
         const isCorrect = selectedOption === question.correct;
         
@@ -305,6 +312,11 @@ class CzechLearningCore {
         }
         
         return results;
+    }
+
+    // Check if current question has been answered
+    isCurrentQuestionAnswered() {
+        return this.examAnswers.some(answer => answer.question === this.currentQuestion);
     }
 
     // Progress management

@@ -442,7 +442,22 @@ class CzechLearningUI {
     }
 
     handleAnswerSelection(selectedOption, question) {
+        // Check if options are already disabled (answer already given)
+        const optionButtons = document.querySelectorAll('.option-button');
+        const alreadyAnswered = Array.from(optionButtons).some(button => button.classList.contains('disabled'));
+        
+        if (alreadyAnswered) {
+            console.log('Question already answered, ignoring click');
+            return;
+        }
+
         const result = this.core.selectAnswer(selectedOption);
+        
+        // If the core rejected the answer (already answered), don't proceed
+        if (!result) {
+            console.log('Core rejected answer selection');
+            return;
+        }
         
         // Auto-play audio for Czech options (spanish-to-czech questions)
         if (question.type === 'spanish-to-czech') {
@@ -450,7 +465,6 @@ class CzechLearningUI {
         }
         
         // Disable all option buttons and show correct/incorrect
-        const optionButtons = document.querySelectorAll('.option-button');
         optionButtons.forEach(button => {
             button.classList.add('disabled');
             const optionText = button.getAttribute('data-option');
