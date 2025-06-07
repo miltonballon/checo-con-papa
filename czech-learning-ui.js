@@ -750,17 +750,33 @@ class CzechLearningUI {
         const mainContent = document.getElementById('main-content');
         const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
         
+        // Generate feedback message
+        let feedback = '';
+        if (results.passed) {
+            if (results.passedByPercentage && results.passedByMaxErrors) {
+                feedback = `¡Excelente trabajo! Has aprobado cumpliendo ambos criterios: ${results.percentage}% de aciertos y solo ${results.incorrectAnswers} respuestas incorrectas.`;
+            } else if (results.passedByPercentage) {
+                feedback = `¡Muy bien! Has aprobado con ${results.percentage}% de aciertos (necesitabas 90% o menos de 4 errores).`;
+            } else if (results.passedByMaxErrors) {
+                feedback = `¡Bien hecho! Has aprobado con ${results.incorrectAnswers} respuestas incorrectas (necesitabas 90% o menos de 4 errores).`;
+            }
+        } else {
+            feedback = `Para aprobar necesitas 90% de aciertos O máximo 4 respuestas incorrectas. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+        }
+        
         mainContent.innerHTML = `
             <div class="exam-results">
-                <div class="score ${results.passed ? 'passing' : 'failing'}">
-                    ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%)
+                <h2 class="lesson-title">${results.lessonName}</h2>
+                <div class="exam-date">${results.examDate}</div>
+                
+                <div class="result-summary">
+                    ${studentName}, lograste ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%).
                 </div>
-                <div class="result-message">
-                    ${results.passed ? 
-                        `¡Excelente trabajo, ${studentName}! 🎉 Has aprobado esta lección.` : 
-                        `${studentName}, necesitas practicar más. ¡No te rindas! 💪 Intenta de nuevo.`
-                    }
+                
+                <div class="feedback ${results.passed ? 'success' : 'failure'}">
+                    ${feedback}
                 </div>
+                
                 <div class="result-buttons">
                     <button class="result-button" id="back-to-practice">
                         Volver a Practicar

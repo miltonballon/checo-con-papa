@@ -325,9 +325,14 @@ class CzechLearningCore {
 
     finishExam() {
         const correctAnswers = this.examAnswers.filter(answer => answer.isCorrect).length;
+        const incorrectAnswers = this.examAnswers.length - correctAnswers;
         const totalQuestions = this.examQuestions.length;
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-        const passed = percentage >= 80; // Need 80% to pass
+        
+        // Passing criteria: 90% OR maximum 4 incorrect answers (whichever is less restrictive)
+        const passedByPercentage = percentage >= 90;
+        const passedByMaxErrors = incorrectAnswers <= 4;
+        const passed = passedByPercentage || passedByMaxErrors;
         
         // Unlock next section if passed
         if (passed && !this.unlockedSections.includes(this.currentSection + 1) && this.currentSection < this.phrases.length - 1) {
@@ -335,12 +340,27 @@ class CzechLearningCore {
             this.saveProgress();
         }
         
+        // Get lesson name and exam date
+        const lessonName = this.phrases[this.currentSection].section;
+        const examDate = new Date().toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
         const results = {
             correctAnswers,
+            incorrectAnswers,
             totalQuestions,
             percentage,
             passed,
-            canAdvance: passed && this.currentSection < this.phrases.length - 1
+            passedByPercentage,
+            passedByMaxErrors,
+            canAdvance: passed && this.currentSection < this.phrases.length - 1,
+            lessonName,
+            examDate
         };
         
         if (this.onExamComplete) {
