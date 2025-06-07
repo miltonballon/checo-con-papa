@@ -562,8 +562,8 @@ class CzechLearningCore {
         console.log('🎤 Recognized text:', transcript);
         console.log('📊 Speech confidence:', (confidence * 100).toFixed(1) + '%');
         
-        // Calculate pronunciation accuracy using simple string similarity
-        const accuracy = this.calculatePronunciationAccuracy(transcript, targetText);
+        // Calculate pronunciation accuracy combining text similarity and speech recognition confidence
+        const accuracy = this.calculatePronunciationAccuracy(transcript, targetText, confidence);
         
         console.log('🔍 Calculated accuracy:', accuracy + '%');
         console.log('===============================');
@@ -589,10 +589,11 @@ class CzechLearningCore {
         }
     }
 
-    calculatePronunciationAccuracy(transcript, target) {
+    calculatePronunciationAccuracy(transcript, target, confidence = 0) {
         console.log('--- ACCURACY CALCULATION ---');
         console.log('Input transcript (raw):', transcript);
         console.log('Target text (raw):', target);
+        console.log('Speech confidence:', (confidence * 100).toFixed(1) + '%');
         
         // Remove punctuation from both strings
         const cleanTranscript = this.removePunctuation(transcript);
@@ -601,20 +602,33 @@ class CzechLearningCore {
         console.log('Input transcript (clean):', cleanTranscript);
         console.log('Target text (clean):', cleanTarget);
         
-        // Simple Levenshtein distance-based accuracy calculation
+        // Calculate text similarity using Levenshtein distance
         const maxLength = Math.max(cleanTranscript.length, cleanTarget.length);
         console.log('Max length:', maxLength);
         
         if (maxLength === 0) {
-            console.log('Both strings empty, returning 100%');
-            return 100;
+            console.log('Both strings empty, returning confidence score');
+            return Math.round(confidence * 100);
         }
         
         const distance = this.levenshteinDistance(cleanTranscript, cleanTarget);
         console.log('Levenshtein distance:', distance);
         
-        const accuracy = Math.max(0, Math.round(((maxLength - distance) / maxLength) * 100));
+        const textSimilarity = Math.max(0, ((maxLength - distance) / maxLength));
+        console.log('Text similarity (0-1):', textSimilarity.toFixed(3));
+        
+        // Combine text similarity with speech recognition confidence
+        // Weight: 70% text similarity, 30% speech confidence
+        const textWeight = 0.7;
+        const confidenceWeight = 0.3;
+        
+        const combinedScore = (textSimilarity * textWeight) + (confidence * confidenceWeight);
+        console.log('Combined score (0-1):', combinedScore.toFixed(3));
+        
+        const accuracy = Math.max(0, Math.round(combinedScore * 100));
         console.log('Final accuracy:', accuracy + '%');
+        console.log('  - Text similarity contribution:', Math.round(textSimilarity * textWeight * 100) + '%');
+        console.log('  - Confidence contribution:', Math.round(confidence * confidenceWeight * 100) + '%');
         console.log('---------------------------');
         
         return accuracy;
