@@ -3,6 +3,7 @@ class CzechLearningUI {
     constructor(core) {
         console.log('CzechLearningUI constructor starting...');
         this.core = core;
+        this.recordingTimeout = null;
         
         // Scroll-based header hiding
         this.lastScrollTop = 0;
@@ -25,6 +26,7 @@ class CzechLearningUI {
         this.core.onExamStart = (totalQuestions) => this.renderExamStart(totalQuestions);
         this.core.onQuestionChange = (questionData) => this.renderQuestion(questionData);
         this.core.onExamComplete = (results) => this.renderExamResults(results);
+        this.core.onPronunciationResult = (result) => this.handlePronunciationResult(result);
     }
 
     async init() {
@@ -298,37 +300,77 @@ class CzechLearningUI {
         this.renderNavigation(); // Update navigation to reflect current section
         
         const mainContent = document.getElementById('main-content');
+        const canTakeExam = this.core.canTakeExam();
         
         mainContent.innerHTML = `
             <div class="section-content">
                 <h2 class="section-title">${sectionData.section}</h2>
                 <div class="phrases-container">
-                    ${sectionData.items.map(phrase => this.renderPhraseCard(phrase)).join('')}
+                    ${sectionData.items.map((phrase, index) => this.renderPhraseCard(phrase, index)).join('')}
                 </div>
-                <button class="exam-button" id="start-exam-btn">
+                <div class="exam-requirements">
+                    ${!canTakeExam ? 
+                        '<div class="requirement-message">⚠️ Debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.</div>' : 
+                        '<div class="requirement-message success">✅ ¡Excelente! Has completado todos los requisitos de pronunciación.</div>'
+                    }
+                </div>
+                <button class="exam-button" id="start-exam-btn" ${!canTakeExam ? 'disabled' : ''}>
                     📝 Tomar Examen
                 </button>
             </div>
         `;
         
         // Add event listener for exam button
-        document.getElementById('start-exam-btn').addEventListener('click', () => {
-            this.core.startExam();
-        });
+        const examButton = document.getElementById('start-exam-btn');
+        console.log('=== EXAM BUTTON DEBUG ===');
+        console.log('Exam button found:', !!examButton);
+        console.log('Can take exam:', canTakeExam);
+        console.log('Button disabled:', examButton ? examButton.disabled : 'N/A');
+        console.log('========================');
+        
+        if (examButton) {
+            examButton.addEventListener('click', () => {
+                console.log('=== EXAM BUTTON CLICKED ===');
+                console.log('Can take exam at click time:', this.core.canTakeExam());
+                console.log('Starting exam...');
+                console.log('==========================');
+                
+                if (this.core.canTakeExam()) {
+                    this.core.startExam();
+                } else {
+                    console.log('Exam not allowed - requirements not met');
+                    this.showNotification('Debes completar todos los requisitos de pronunciación primero.');
+                }
+            });
+        } else {
+            console.error('Exam button not found in DOM!');
+        }
         
         this.setupAudioButtons();
+        this.setupPronunciationButtons();
     }
 
-    renderPhraseCard(phrase) {
+    renderPhraseCard(phrase, phraseIndex) {
         const [spanish, czech, pronunciation] = phrase;
+        const pronunciationScore = this.core.getPronunciationScore(this.core.currentSection, phraseIndex);
+        const scoreClass = pronunciationScore >= 90 ? 'excellent' : pronunciationScore >= 70 ? 'good' : pronunciationScore > 0 ? 'needs-improvement' : 'not-attempted';
+        
         return `
-            <div class="phrase-card">
+            <div class="phrase-card" data-phrase-index="${phraseIndex}">
                 <div class="phrase-spanish">${spanish}</div>
                 <div class="phrase-czech">${czech}</div>
                 <div class="phrase-pronunciation">${pronunciation}</div>
-                <button class="audio-button" data-text="${czech}">
-                    🔊 Escuchar
-                </button>
+                <div class="phrase-controls">
+                    <button class="audio-button" data-text="${czech}">
+                        🔊 Escuchar
+                    </button>
+                    <button class="pronunciation-button" data-phrase-index="${phraseIndex}" ${this.core.isRecording ? 'disabled' : ''}>
+                        🎤 Pronunciar
+                    </button>
+                    <div class="pronunciation-score ${scoreClass}">
+                        ${pronunciationScore > 0 ? `${pronunciationScore}%` : 'Sin intentar'}
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -341,6 +383,125 @@ class CzechLearningUI {
                 this.playAudio(text);
             });
         });
+    }
+
+    setupPronunciationButtons() {
+        const pronunciationButtons = document.querySelectorAll('.pronunciation-button');
+        pronunciationButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const phraseIndex = parseInt(button.getAttribute('data-phrase-index'));
+                this.startPronunciation(phraseIndex, button);
+            });
+        });
+    }
+
+    startPronunciation(phraseIndex, button) {
+        if (this.core.isRecording) {
+            console.log('Ya hay una grabación en progreso');
+            return;
+        }
+
+        console.log('Iniciando pronunciación para frase:', phraseIndex);
+        
+        // Update button state
+        button.disabled = true;
+        button.innerHTML = '🎤 Grabando...';
+        button.classList.add('recording');
+        
+        // Disable all other pronunciation buttons
+        const allButtons = document.querySelectorAll('.pronunciation-button');
+        allButtons.forEach(btn => btn.disabled = true);
+        
+        this.core.startPronunciation(this.core.currentSection, phraseIndex);
+        
+        // Auto-stop recording after 5 seconds
+        this.recordingTimeout = setTimeout(() => {
+            if (this.core.isRecording && this.core.recognition) {
+                console.log('Auto-stopping recording after 5 seconds');
+                this.core.recognition.stop();
+                
+                // If no result was detected, show timeout message
+                setTimeout(() => {
+                    if (this.core.isRecording) {
+                        this.core.isRecording = false;
+                        this.handlePronunciationResult({
+                            error: true,
+                            message: 'Tiempo de grabación agotado. Intenta hablar más claro.'
+                        });
+                    }
+                }, 500);
+            }
+        }, 5000);
+    }
+
+    handlePronunciationResult(result) {
+        // Clear any active recording timeout
+        if (this.recordingTimeout) {
+            clearTimeout(this.recordingTimeout);
+            this.recordingTimeout = null;
+        }
+        
+        // Re-enable all pronunciation buttons
+        const allButtons = document.querySelectorAll('.pronunciation-button');
+        allButtons.forEach(btn => {
+            btn.disabled = false;
+            btn.innerHTML = '🎤 Pronunciar';
+            btn.classList.remove('recording');
+        });
+        
+        if (result.error) {
+            this.showNotification(result.message);
+            return;
+        }
+        
+        // Update the score display for this phrase
+        const phraseCard = document.querySelector(`[data-phrase-index="${result.phraseIndex}"]`);
+        if (phraseCard) {
+            const scoreElement = phraseCard.querySelector('.pronunciation-score');
+            const scoreClass = result.accuracy >= 90 ? 'excellent' : result.accuracy >= 70 ? 'good' : 'needs-improvement';
+            
+            scoreElement.className = `pronunciation-score ${scoreClass}`;
+            scoreElement.textContent = `${result.accuracy}%`;
+        }
+        
+        // Show feedback message
+        const confidenceInfo = result.confidence ? ` (Confianza: ${result.confidence.toFixed(1)}%)` : '';
+        const feedbackMessage = result.accuracy >= 90 ? 
+            '¡Excelente pronunciación!' : 
+            result.accuracy >= 70 ? 
+            'Buena pronunciación, sigue practicando' : 
+            'Necesitas más práctica';
+            
+        this.showNotification(`${feedbackMessage} (${result.accuracy}%)${confidenceInfo}`);
+        
+        console.log('=== PRONUNCIATION RESULT UI ===');
+        console.log('📊 Accuracy:', result.accuracy + '%');
+        console.log('🎤 Transcript:', result.transcript);
+        console.log('🎯 Target:', result.target);
+        if (result.confidence) {
+            console.log('📈 Speech confidence:', result.confidence.toFixed(1) + '%');
+        }
+        console.log('===============================');
+        // Check if exam button should be enabled
+        setTimeout(() => {
+            const canTakeExam = this.core.canTakeExam();
+            const examButton = document.getElementById('start-exam-btn');
+            const requirementMessage = document.querySelector('.requirement-message');
+            
+            if (examButton) {
+                examButton.disabled = !canTakeExam;
+            }
+            
+            if (requirementMessage) {
+                if (canTakeExam) {
+                    requirementMessage.className = 'requirement-message success';
+                    requirementMessage.innerHTML = '✅ ¡Excelente! Has completado todos los requisitos de pronunciación.';
+                } else {
+                    requirementMessage.className = 'requirement-message';
+                    requirementMessage.innerHTML = '⚠️ Debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.';
+                }
+            }
+        }, 100);
     }
 
     renderExamStart(totalQuestions) {

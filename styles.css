@@ -310,6 +310,13 @@ main {
     margin-bottom: 1rem;
 }
 
+.phrase-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 .audio-button {
     background: #48bb78;
     color: white;
@@ -348,6 +355,70 @@ main {
     100% { transform: scale(1); }
 }
 
+.pronunciation-button {
+    background: #ed8936;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.pronunciation-button:hover {
+    background: #dd6b20;
+    transform: scale(1.05);
+}
+
+.pronunciation-button:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pronunciation-button.recording {
+    background: #e53e3e;
+    animation: pulse 1s infinite;
+}
+
+.pronunciation-score {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    border: 2px solid;
+    min-width: 80px;
+    text-align: center;
+}
+
+.pronunciation-score.not-attempted {
+    color: #718096;
+    border-color: #e2e8f0;
+    background: #f7fafc;
+}
+
+.pronunciation-score.needs-improvement {
+    color: #e53e3e;
+    border-color: #feb2b2;
+    background: #fed7d7;
+}
+
+.pronunciation-score.good {
+    color: #ed8936;
+    border-color: #fbd38d;
+    background: #fef5e7;
+}
+
+.pronunciation-score.excellent {
+    color: #38a169;
+    border-color: #9ae6b4;
+    background: #f0fff4;
+}
+
 .question-audio {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -380,6 +451,38 @@ main {
 .exam-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.exam-button:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.exam-button:disabled:hover {
+    background: #a0aec0;
+    transform: none;
+}
+
+.exam-requirements {
+    text-align: center;
+    margin: 2rem 0 1rem;
+}
+
+.requirement-message {
+    padding: 1rem;
+    border-radius: 10px;
+    border: 2px solid #fed7b9;
+    background: #fffaf0;
+    color: #d69e2e;
+    font-weight: 500;
+}
+
+.requirement-message.success {
+    border-color: #9ae6b4;
+    background: #f0fff4;
+    color: #38a169;
 }
 
 .question-container {
