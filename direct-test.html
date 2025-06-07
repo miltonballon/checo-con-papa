@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Test</title>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🇨🇿 Direct Test</h1>
+            <div id="progress-indicator">Progress will show here</div>
+            <nav>
+                <button id="nav-toggle">☰ Lecciones</button>
+                <div id="nav-menu">Menu items will appear here</div>
+            </nav>
+        </header>
+
+        <main id="main-content">
+            <p>Loading direct test...</p>
+        </main>
+    </div>
+
+    <script>
+        console.log('Direct script starting...');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded in direct script');
+            
+            const mainContent = document.getElementById('main-content');
+            const navMenu = document.getElementById('nav-menu');
+            const progressIndicator = document.getElementById('progress-indicator');
+            
+            if (mainContent) {
+                mainContent.innerHTML = '<h2>JavaScript is working!</h2><p>Direct script test successful</p>';
+                console.log('Updated main content');
+            } else {
+                console.error('main-content not found');
+            }
+            
+            if (navMenu) {
+                navMenu.innerHTML = '<button>Test Menu Item</button>';
+                console.log('Updated nav menu');
+            } else {
+                console.error('nav-menu not found');
+            }
+            
+            if (progressIndicator) {
+                progressIndicator.innerHTML = '<div>Progress: 0%</div>';
+                console.log('Updated progress indicator');
+            } else {
+                console.error('progress-indicator not found');
+            }
+            
+            // Test fetch
+            fetch('./phrases.json')
+                .then(response => {
+                    console.log('Fetch response:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Phrases loaded:', data.length, 'sections');
+                    if (mainContent && data.length > 0) {
+                        mainContent.innerHTML += `<p>Successfully loaded ${data.length} sections from phrases.json</p>`;
+                        mainContent.innerHTML += `<p>First section: ${data[0].section}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading phrases:', error);
+                    if (mainContent) {
+                        mainContent.innerHTML += `<p style="color: red;">Error loading phrases: ${error.message}</p>`;
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

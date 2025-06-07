@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test</h1>
+    <div id="debug-output"></div>
+    
+    <script>
+        console.log('Starting debug test...');
+        
+        // Test if scripts load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded');
+            
+            const output = document.getElementById('debug-output');
+            
+            try {
+                if (typeof CzechLearningCore === 'undefined') {
+                    output.innerHTML += '<p>ERROR: CzechLearningCore is not defined</p>';
+                    console.error('CzechLearningCore is not defined');
+                } else {
+                    output.innerHTML += '<p>✓ CzechLearningCore is loaded</p>';
+                    console.log('CzechLearningCore is loaded');
+                }
+                
+                if (typeof CzechLearningUI === 'undefined') {
+                    output.innerHTML += '<p>ERROR: CzechLearningUI is not defined</p>';
+                    console.error('CzechLearningUI is not defined');
+                } else {
+                    output.innerHTML += '<p>✓ CzechLearningUI is loaded</p>';
+                    console.log('CzechLearningUI is loaded');
+                }
+                
+                // Test creating core
+                const core = new CzechLearningCore();
+                output.innerHTML += '<p>✓ CzechLearningCore instantiated successfully</p>';
+                
+                // Test creating UI
+                const ui = new CzechLearningUI(core);
+                output.innerHTML += '<p>✓ CzechLearningUI instantiated successfully</p>';
+                
+            } catch (error) {
+                output.innerHTML += `<p>ERROR: ${error.message}</p>`;
+                console.error('Error in debug test:', error);
+            }
+        });
+    </script>
+    
+    <script src="czech-learning-core.js"></script>
+    <script src="czech-learning-ui.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
