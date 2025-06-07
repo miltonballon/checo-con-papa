@@ -357,6 +357,21 @@ main {
     background: #f56565;
 }
 
+/* Disabled audio buttons during recording */
+.audio-button.disabled-during-recording {
+    background: #a0aec0 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    transform: none !important;
+}
+
+.audio-button-inline.disabled-during-recording {
+    background: #a0aec0 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    transform: none !important;
+}
+
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }

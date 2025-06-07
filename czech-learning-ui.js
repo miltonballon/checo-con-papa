@@ -408,6 +408,13 @@ class CzechLearningUI {
         const audioButtons = document.querySelectorAll('.audio-button');
         audioButtons.forEach(button => {
             button.addEventListener('click', () => {
+                // Prevent audio if pronunciation is active
+                if (this.core.isRecording) {
+                    const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+                    this.showNotification(`${studentName}, espera a terminar la pronunciación antes de escuchar el audio.`);
+                    return;
+                }
+                
                 const text = button.getAttribute('data-text');
                 this.playAudio(text);
             });
@@ -421,6 +428,24 @@ class CzechLearningUI {
                 const phraseIndex = parseInt(button.getAttribute('data-phrase-index'));
                 this.startPronunciation(phraseIndex, button);
             });
+        });
+    }
+
+    // Method to disable/enable audio buttons during pronunciation recording
+    setAudioButtonsDisabledState(disabled) {
+        const audioButtons = document.querySelectorAll('.audio-button, .audio-button-inline');
+        audioButtons.forEach(button => {
+            if (disabled) {
+                button.classList.add('disabled-during-recording');
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+                button.style.pointerEvents = 'none';
+            } else {
+                button.classList.remove('disabled-during-recording');
+                button.style.opacity = '';
+                button.style.cursor = '';
+                button.style.pointerEvents = '';
+            }
         });
     }
 
@@ -440,6 +465,9 @@ class CzechLearningUI {
         // Disable all other pronunciation buttons
         const allButtons = document.querySelectorAll('.pronunciation-button');
         allButtons.forEach(btn => btn.disabled = true);
+        
+        // Disable and visually indicate audio buttons are blocked
+        this.setAudioButtonsDisabledState(true);
         
         this.core.startPronunciation(this.core.currentSection, phraseIndex);
         
@@ -477,6 +505,9 @@ class CzechLearningUI {
             btn.innerHTML = '🎤 Pronunciar';
             btn.classList.remove('recording');
         });
+
+        // Re-enable audio buttons
+        this.setAudioButtonsDisabledState(false);
         
         if (result.error) {
             this.showNotification(result.message);
