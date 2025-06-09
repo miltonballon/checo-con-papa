@@ -575,14 +575,18 @@ class CzechLearningCore {
         
         const { sectionIndex, phraseIndex } = this.currentPronunciationPhrase;
         const phrase = this.phrases[sectionIndex].items[phraseIndex];
-        const targetText = phrase[1].toLowerCase().trim(); // Czech text
+        const primaryTarget = phrase[1].toLowerCase().trim(); // Czech text
+        const alternativeTarget = phrase[3] ? phrase[3].toLowerCase().trim() : null; // Alternative text (4th element)
         
-        console.log('🎯 Target text:', targetText);
+        console.log('🎯 Primary target text:', primaryTarget);
+        if (alternativeTarget) {
+            console.log('🎯 Alternative target text:', alternativeTarget);
+        }
         console.log('🎤 Recognized text:', transcript);
         console.log('📊 Speech confidence:', (confidence * 100).toFixed(1) + '%');
         
         // Calculate pronunciation accuracy combining text similarity and speech recognition confidence
-        const accuracy = this.calculatePronunciationAccuracy(transcript, targetText, confidence);
+        const accuracy = this.calculatePronunciationAccuracy(transcript, primaryTarget, confidence, alternativeTarget);
         
         console.log('🔍 Calculated accuracy:', accuracy + '%');
         console.log('===============================');
@@ -600,7 +604,8 @@ class CzechLearningCore {
             this.onPronunciationResult({
                 accuracy,
                 transcript,
-                target: targetText,
+                target: primaryTarget,
+                alternativeTarget: alternativeTarget,
                 confidence: confidence * 100,
                 sectionIndex,
                 phraseIndex
@@ -608,49 +613,74 @@ class CzechLearningCore {
         }
     }
 
-    calculatePronunciationAccuracy(transcript, target, confidence = 0) {
+    calculatePronunciationAccuracy(transcript, target, confidence = 0, alternativeTarget = null) {
         console.log('--- ACCURACY CALCULATION ---');
         console.log('Input transcript (raw):', transcript);
-        console.log('Target text (raw):', target);
+        console.log('Primary target text (raw):', target);
+        if (alternativeTarget) {
+            console.log('Alternative target text (raw):', alternativeTarget);
+        }
         console.log('Speech confidence:', (confidence * 100).toFixed(1) + '%');
         
-        // Remove punctuation from both strings
+        // Remove punctuation from transcript
         const cleanTranscript = this.removePunctuation(transcript);
-        const cleanTarget = this.removePunctuation(target);
-        
         console.log('Input transcript (clean):', cleanTranscript);
-        console.log('Target text (clean):', cleanTarget);
         
-        // Calculate text similarity using Levenshtein distance
-        const maxLength = Math.max(cleanTranscript.length, cleanTarget.length);
-        console.log('Max length:', maxLength);
+        // Calculate accuracy for primary target
+        const primaryAccuracy = this.calculateTextSimilarity(cleanTranscript, target);
+        console.log('Primary target accuracy:', primaryAccuracy.toFixed(3));
         
-        if (maxLength === 0) {
-            console.log('Both strings empty, returning confidence score');
-            return Math.round(confidence * 100);
+        let bestTextSimilarity = primaryAccuracy;
+        let bestTarget = target;
+        
+        // If alternative target exists, calculate its accuracy too
+        if (alternativeTarget) {
+            const alternativeAccuracy = this.calculateTextSimilarity(cleanTranscript, alternativeTarget);
+            console.log('Alternative target accuracy:', alternativeAccuracy.toFixed(3));
+            
+            // Use the better similarity score
+            if (alternativeAccuracy > primaryAccuracy) {
+                bestTextSimilarity = alternativeAccuracy;
+                bestTarget = alternativeTarget;
+                console.log('Using alternative target as best match');
+            } else {
+                console.log('Using primary target as best match');
+            }
         }
         
-        const distance = this.levenshteinDistance(cleanTranscript, cleanTarget);
-        console.log('Levenshtein distance:', distance);
-        
-        const textSimilarity = Math.max(0, ((maxLength - distance) / maxLength));
-        console.log('Text similarity (0-1):', textSimilarity.toFixed(3));
+        console.log('Best text similarity (0-1):', bestTextSimilarity.toFixed(3));
+        console.log('Best matching target:', bestTarget);
         
         // Combine text similarity with speech recognition confidence
         // Weight: 70% text similarity, 30% speech confidence
         const textWeight = 0.7;
         const confidenceWeight = 0.3;
         
-        const combinedScore = (textSimilarity * textWeight) + (confidence * confidenceWeight);
+        const combinedScore = (bestTextSimilarity * textWeight) + (confidence * confidenceWeight);
         console.log('Combined score (0-1):', combinedScore.toFixed(3));
         
         const accuracy = Math.max(0, Math.round(combinedScore * 100));
         console.log('Final accuracy:', accuracy + '%');
-        console.log('  - Text similarity contribution:', Math.round(textSimilarity * textWeight * 100) + '%');
+        console.log('  - Text similarity contribution:', Math.round(bestTextSimilarity * textWeight * 100) + '%');
         console.log('  - Confidence contribution:', Math.round(confidence * confidenceWeight * 100) + '%');
         console.log('---------------------------');
         
         return accuracy;
+    }
+
+    calculateTextSimilarity(cleanTranscript, target) {
+        // Remove punctuation from target
+        const cleanTarget = this.removePunctuation(target);
+        
+        // Calculate text similarity using Levenshtein distance
+        const maxLength = Math.max(cleanTranscript.length, cleanTarget.length);
+        
+        if (maxLength === 0) {
+            return 1.0; // Both strings empty, perfect match
+        }
+        
+        const distance = this.levenshteinDistance(cleanTranscript, cleanTarget);
+        return Math.max(0, ((maxLength - distance) / maxLength));
     }
 
     removePunctuation(text) {
