@@ -725,15 +725,9 @@ class CzechLearningUI {
         // Generate feedback message
         let feedback = '';
         if (results.passed) {
-            if (results.passedByPercentage && results.passedByMaxErrors) {
-                feedback = `¡Excelente trabajo! Has aprobado cumpliendo ambos criterios: ${results.percentage}% de aciertos y solo ${results.incorrectAnswers} respuestas incorrectas.`;
-            } else if (results.passedByPercentage) {
-                feedback = `¡Muy bien! Has aprobado con ${results.percentage}% de aciertos (necesitabas 90% o menos de 4 errores).`;
-            } else if (results.passedByMaxErrors) {
-                feedback = `¡Bien hecho! Has aprobado con ${results.incorrectAnswers} respuestas incorrectas (necesitabas 90% o menos de 4 errores).`;
-            }
+            feedback = `¡Excelente trabajo! Has aprobado con ${results.percentage}% de aciertos (necesitabas 90% o más).`;
         } else {
-            feedback = `Para aprobar necesitas 90% de aciertos O máximo 4 respuestas incorrectas. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+            feedback = `Para aprobar necesitas 90% de aciertos o más. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
         }
         
         mainContent.innerHTML = `

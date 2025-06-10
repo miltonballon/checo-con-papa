@@ -329,10 +329,9 @@ class CzechLearningCore {
         const totalQuestions = this.examQuestions.length;
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
         
-        // Passing criteria: 90% OR maximum 4 incorrect answers (whichever is less restrictive)
+        // Passing criteria: Only 90% or more correct answers
         const passedByPercentage = percentage >= 90;
-        const passedByMaxErrors = incorrectAnswers <= 4;
-        const passed = passedByPercentage || passedByMaxErrors;
+        const passed = passedByPercentage;
         
         // Unlock next section if passed
         if (passed && !this.unlockedSections.includes(this.currentSection + 1) && this.currentSection < this.phrases.length - 1) {
@@ -357,7 +356,6 @@ class CzechLearningCore {
             percentage,
             passed,
             passedByPercentage,
-            passedByMaxErrors,
             canAdvance: passed && this.currentSection < this.phrases.length - 1,
             lessonName,
             examDate
