@@ -1,5 +1,11 @@
 // filepath: /Users/milton/Source/checo-con-papa/app.js
 // Main application entry point
+console.log('🚀 app.js cargado');
+console.log('📊 Estado del DOM al cargar app.js:', document.readyState);
+console.log('🔍 Verificando clases disponibles:');
+console.log('  - CzechLearningCore disponible:', typeof CzechLearningCore !== 'undefined');
+console.log('  - CzechLearningUI disponible:', typeof CzechLearningUI !== 'undefined');
+
 class CzechLearningApp {
     constructor() {
         console.log('Creating CzechLearningApp...');
@@ -87,12 +93,40 @@ class CzechLearningApp {
 }
 
 // Initialize the application when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing app...');
-    try {
-        window.app = new CzechLearningApp();
-        console.log('App initialized and attached to window');
-    } catch (error) {
-        console.error('Error creating app:', error);
+function initializeApp() {
+    console.log('🔄 Iniciando aplicación...');
+    console.log('📊 Estado del DOM:', document.readyState);
+    console.log('🔍 Verificando dependencias:');
+    console.log('  - CzechLearningCore:', typeof CzechLearningCore !== 'undefined');
+    console.log('  - CzechLearningUI:', typeof CzechLearningUI !== 'undefined');
+    
+    if (typeof CzechLearningCore === 'undefined') {
+        console.error('❌ CzechLearningCore no está disponible');
+        return;
     }
-});
+    
+    if (typeof CzechLearningUI === 'undefined') {
+        console.error('❌ CzechLearningUI no está disponible');
+        return;
+    }
+    
+    try {
+        console.log('✅ Creando instancia de CzechLearningApp...');
+        window.app = new CzechLearningApp();
+        console.log('🎉 App inicializada y disponible en window.app');
+    } catch (error) {
+        console.error('💥 Error creando la app:', error);
+    }
+}
+
+// Check if DOM is already loaded or wait for it
+if (document.readyState === 'loading') {
+    console.log('DOM is still loading, waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded via event listener, initializing app...');
+        initializeApp();
+    });
+} else {
+    console.log('DOM already loaded, initializing app immediately...');
+    initializeApp();
+}

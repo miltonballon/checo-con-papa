@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprende Checo con Papá</title>
+    
+    <!-- Cache prevention meta tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -32,8 +38,61 @@
         </main>
     </div>
 
-    <script src="czech-learning-core.js"></script>
-    <script src="czech-learning-ui.js"></script>
-    <script src="app.js"></script>
+    <script>
+        // Add timestamp to prevent caching of CSS and JS files
+        const timestamp = Date.now();
+        console.log('🚀 Iniciando carga de scripts con timestamp:', timestamp);
+        
+        // Update CSS link with timestamp
+        const cssLink = document.querySelector('link[href="styles.css"]');
+        if (cssLink) {
+            cssLink.href = `styles.css?v=${timestamp}`;
+            console.log('✅ CSS actualizado con timestamp');
+        }
+        
+        // Load JavaScript files with timestamp sequentially
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                console.log('📦 Cargando script:', src);
+                const script = document.createElement('script');
+                script.src = `${src}?v=${timestamp}`;
+                script.onload = () => {
+                    console.log('✅ Script cargado exitosamente:', src);
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.error('❌ Error cargando script:', src, error);
+                    reject(error);
+                };
+                document.body.appendChild(script);
+            });
+        }
+        
+        // Load scripts in sequence
+        async function loadAllScripts() {
+            try {
+                await loadScript('czech-learning-core.js');
+                await loadScript('czech-learning-ui.js');
+                await loadScript('app.js');
+                console.log('🎉 Todos los scripts cargados exitosamente');
+                
+                // Trigger manual initialization if DOM is ready
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                    console.log('🔄 DOM ya está listo, forzando inicialización...');
+                    setTimeout(() => {
+                        if (window.CzechLearningApp && !window.app) {
+                            console.log('🚀 Inicializando app manualmente...');
+                            window.app = new CzechLearningApp();
+                        }
+                    }, 100);
+                }
+            } catch (error) {
+                console.error('💥 Error durante la carga de scripts:', error);
+            }
+        }
+        
+        // Start loading scripts
+        loadAllScripts();
+    </script>
 </body>
 </html>

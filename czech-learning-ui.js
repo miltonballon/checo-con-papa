@@ -1,4 +1,6 @@
 // UI management for Czech Learning App
+console.log('🎨 czech-learning-ui.js cargado');
+
 class CzechLearningUI {
     constructor(core) {
         console.log('CzechLearningUI constructor starting...');

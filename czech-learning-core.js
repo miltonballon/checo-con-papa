@@ -1,4 +1,6 @@
 // Core application logic for Czech Learning App
+console.log('📋 czech-learning-core.js cargado');
+
 class CzechLearningCore {
     constructor() {
         console.log('CzechLearningCore constructor starting...');
@@ -137,7 +139,8 @@ class CzechLearningCore {
 
     async loadPhrases() {
         try {
-            const response = await fetch('./phrases.json');
+            const timestamp = Date.now();
+            const response = await fetch(`./phrases.json?v=${timestamp}`);
             this.phrases = await response.json();
         } catch (error) {
             console.error('Error loading phrases:', error);
