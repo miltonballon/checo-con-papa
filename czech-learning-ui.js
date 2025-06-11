@@ -848,6 +848,14 @@ class CzechLearningUI {
                     
                     // Add a fun sound effect placeholder (you could add actual audio later)
                     console.log('🎉 ¡El certificado está bailando! 🎉');
+                    
+                    // Play celebration music and sparkle sound
+                    this.createCelebrationMusic();
+                    
+                    // Add sparkle sounds with slight delay
+                    setTimeout(() => this.createSparkleSound(), 200);
+                    setTimeout(() => this.createSparkleSound(), 600);
+                    setTimeout(() => this.createSparkleSound(), 1000);
                 });
                 
                 // Add a subtle hint that the certificate is clickable
@@ -901,6 +909,112 @@ class CzechLearningUI {
             speechSynthesis.speak(utterance);
         } else {
             alert('Tu navegador no soporta síntesis de voz');
+        }
+    }
+
+    // Music and sound effects for certificate celebration
+    createCelebrationMusic() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Create a celebratory melody
+            const playNote = (frequency, startTime, duration, type = 'sine') => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, startTime);
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+            };
+            
+            // Celebratory melody - "Ta-da!" style
+            const currentTime = audioContext.currentTime;
+            const notes = [
+                { freq: 523.25, time: 0, duration: 0.2 },     // C5
+                { freq: 659.25, time: 0.1, duration: 0.2 },   // E5
+                { freq: 783.99, time: 0.2, duration: 0.2 },   // G5
+                { freq: 1046.5, time: 0.3, duration: 0.4 },   // C6 (longer)
+                
+                // Second phrase
+                { freq: 880, time: 0.8, duration: 0.15 },     // A5
+                { freq: 1046.5, time: 0.95, duration: 0.15 }, // C6
+                { freq: 1174.7, time: 1.1, duration: 0.3 },   // D6
+                { freq: 1318.5, time: 1.4, duration: 0.1 },   // E6 (final flourish)
+            ];
+            
+            // Play the melody
+            notes.forEach(note => {
+                playNote(note.freq, currentTime + note.time, note.duration);
+            });
+            
+            // Add some percussion-like sounds for rhythm
+            const addPercussion = (time, frequency, duration) => {
+                playNote(frequency, currentTime + time, duration, 'square');
+            };
+            
+            // Add rhythmic elements
+            addPercussion(0, 130.81, 0.1);    // Bass note
+            addPercussion(0.4, 130.81, 0.1);  // Bass note
+            addPercussion(0.8, 130.81, 0.1);  // Bass note
+            addPercussion(1.2, 130.81, 0.15); // Final bass
+            
+            return true;
+        } catch (error) {
+            console.log('Audio not supported or failed:', error);
+            return false;
+        }
+    }
+
+    // Create magical sparkle sound effect
+    createSparkleSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const createSparkle = (delay) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Random high frequency for sparkle effect
+                const freq = 800 + Math.random() * 1200;
+                oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + delay);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 2, audioContext.currentTime + delay + 0.1);
+                
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(400, audioContext.currentTime + delay);
+                
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime + delay);
+                gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + delay + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + delay + 0.15);
+                
+                oscillator.start(audioContext.currentTime + delay);
+                oscillator.stop(audioContext.currentTime + delay + 0.15);
+            };
+            
+            // Create multiple sparkles with slight delays
+            for (let i = 0; i < 8; i++) {
+                createSparkle(i * 0.1);
+            }
+            
+            return true;
+        } catch (error) {
+            console.log('Sparkle sound failed:', error);
+            return false;
         }
     }
 }
