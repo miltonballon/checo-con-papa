@@ -720,42 +720,92 @@ class CzechLearningUI {
 
     renderExamResults(results) {
         const mainContent = document.getElementById('main-content');
-        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
         
-        // Generate feedback message
-        let feedback = '';
+        // Check if we're in debug mode (questions parameter detected)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDebugMode = urlParams.get('questions') !== null;
+        
+        // Use "MODO DEBUG" if in debug mode, otherwise use real student name
+        const studentName = isDebugMode ? 'MODO DEBUG' : (window.app ? window.app.getStudentName() : 'Estudiante');
+        
         if (results.passed) {
-            feedback = `¡Excelente trabajo! Has aprobado con ${results.percentage}% de aciertos (necesitabas 90% o más).`;
+            // Certificate design for passed exam
+            mainContent.innerHTML = `
+                <div class="certificate-container">
+                    <div class="certificate">
+                        <div class="certificate-border">
+                            <div class="certificate-content">
+                                <div class="certificate-header">
+                                    <div class="certificate-seal">🏆</div>
+                                    <h1 class="certificate-title">Certificado de Aprobación</h1>
+                                    <div class="certificate-subtitle">Aprende Checo con Papá</div>
+                                </div>
+                                
+                                <div class="certificate-body">
+                                    <p class="certificate-text">Se certifica que</p>
+                                    <h2 class="certificate-student-name">${studentName}</h2>
+                                    <p class="certificate-text">ha completado exitosamente la lección</p>
+                                    <h3 class="certificate-lesson">"${results.lessonName}"</h3>
+                                    <p class="certificate-achievement">
+                                        con una calificación de <span class="certificate-score">${results.percentage}%</span>
+                                        <br>
+                                        (${results.correctAnswers}/${results.totalQuestions} respuestas correctas)
+                                    </p>
+                                </div>
+                                
+                                <div class="certificate-footer">
+                                    <div class="certificate-date">
+                                        <div class="certificate-date-label">Fecha de Aprobación</div>
+                                        <div class="certificate-date-value">${results.examDate}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="certificate-decorations">
+                                    <div class="certificate-star star-1">⭐</div>
+                                    <div class="certificate-star star-2">⭐</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="certificate-actions">
+                        <button class="certificate-button" id="back-to-practice">
+                            📚 Volver a Practicar
+                        </button>
+                        ${results.canAdvance ? 
+                            `<button class="certificate-button primary" id="continue-next">
+                                🚀 Continuar a la Siguiente Lección
+                            </button>` : 
+                            ''
+                        }
+                    </div>
+                </div>
+            `;
         } else {
-            feedback = `Para aprobar necesitas 90% de aciertos o más. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+            // Regular failure screen
+            const feedback = `Para aprobar necesitas 90% de aciertos o más. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+            
+            mainContent.innerHTML = `
+                <div class="exam-results">
+                    <h2 class="lesson-title">${results.lessonName}</h2>
+                    <div class="exam-date">${results.examDate}</div>
+                    
+                    <div class="result-summary">
+                        ${studentName}, lograste ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%).
+                    </div>
+                    
+                    <div class="feedback failure">
+                        ${feedback}
+                    </div>
+                    
+                    <div class="result-buttons">
+                        <button class="result-button" id="back-to-practice">
+                            Volver a Practicar
+                        </button>
+                    </div>
+                </div>
+            `;
         }
-        
-        mainContent.innerHTML = `
-            <div class="exam-results">
-                <h2 class="lesson-title">${results.lessonName}</h2>
-                <div class="exam-date">${results.examDate}</div>
-                
-                <div class="result-summary">
-                    ${studentName}, lograste ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%).
-                </div>
-                
-                <div class="feedback ${results.passed ? 'success' : 'failure'}">
-                    ${feedback}
-                </div>
-                
-                <div class="result-buttons">
-                    <button class="result-button" id="back-to-practice">
-                        Volver a Practicar
-                    </button>
-                    ${results.canAdvance ? 
-                        `<button class="result-button success" id="continue-next">
-                            Continuar a la Siguiente Lección
-                        </button>` : 
-                        ''
-                    }
-                </div>
-            </div>
-        `;
         
         // Add event listeners
         document.getElementById('back-to-practice').addEventListener('click', () => {
@@ -764,9 +814,53 @@ class CzechLearningUI {
         });
         
         if (results.canAdvance) {
-            document.getElementById('continue-next').addEventListener('click', () => {
-                this.core.unlockNextSection();
-            });
+            const continueButton = document.getElementById('continue-next');
+            if (continueButton) {
+                continueButton.addEventListener('click', () => {
+                    this.core.unlockNextSection();
+                });
+            }
+        }
+        
+        // Add certificate dance functionality (only if passed)
+        if (results.passed) {
+            const certificate = document.querySelector('.certificate');
+            const certificateContainer = document.querySelector('.certificate-container');
+            
+            if (certificate) {
+                certificate.addEventListener('click', () => {
+                    // Remove any existing animation classes
+                    certificate.classList.remove('dancing');
+                    certificateContainer.classList.remove('celebrating');
+                    
+                    // Force reflow to restart animation
+                    certificate.offsetHeight;
+                    
+                    // Add animation classes
+                    certificate.classList.add('dancing');
+                    certificateContainer.classList.add('celebrating');
+                    
+                    // Remove animation classes after animation completes
+                    setTimeout(() => {
+                        certificate.classList.remove('dancing');
+                        certificateContainer.classList.remove('celebrating');
+                    }, 1500);
+                    
+                    // Add a fun sound effect placeholder (you could add actual audio later)
+                    console.log('🎉 ¡El certificado está bailando! 🎉');
+                    
+                    // Play celebration music and sparkle sound
+                    this.createCelebrationMusic();
+                    
+                    // Add sparkle sounds with slight delay
+                    setTimeout(() => this.createSparkleSound(), 200);
+                    setTimeout(() => this.createSparkleSound(), 600);
+                    setTimeout(() => this.createSparkleSound(), 1000);
+                });
+                
+                // Add a subtle hint that the certificate is clickable
+                certificate.title = "¡Haz clic para hacer bailar el certificado! 🕺💃";
+            }
         }
     }
 
@@ -815,6 +909,112 @@ class CzechLearningUI {
             speechSynthesis.speak(utterance);
         } else {
             alert('Tu navegador no soporta síntesis de voz');
+        }
+    }
+
+    // Music and sound effects for certificate celebration
+    createCelebrationMusic() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Create a celebratory melody
+            const playNote = (frequency, startTime, duration, type = 'sine') => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, startTime);
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+            };
+            
+            // Celebratory melody - "Ta-da!" style
+            const currentTime = audioContext.currentTime;
+            const notes = [
+                { freq: 523.25, time: 0, duration: 0.2 },     // C5
+                { freq: 659.25, time: 0.1, duration: 0.2 },   // E5
+                { freq: 783.99, time: 0.2, duration: 0.2 },   // G5
+                { freq: 1046.5, time: 0.3, duration: 0.4 },   // C6 (longer)
+                
+                // Second phrase
+                { freq: 880, time: 0.8, duration: 0.15 },     // A5
+                { freq: 1046.5, time: 0.95, duration: 0.15 }, // C6
+                { freq: 1174.7, time: 1.1, duration: 0.3 },   // D6
+                { freq: 1318.5, time: 1.4, duration: 0.1 },   // E6 (final flourish)
+            ];
+            
+            // Play the melody
+            notes.forEach(note => {
+                playNote(note.freq, currentTime + note.time, note.duration);
+            });
+            
+            // Add some percussion-like sounds for rhythm
+            const addPercussion = (time, frequency, duration) => {
+                playNote(frequency, currentTime + time, duration, 'square');
+            };
+            
+            // Add rhythmic elements
+            addPercussion(0, 130.81, 0.1);    // Bass note
+            addPercussion(0.4, 130.81, 0.1);  // Bass note
+            addPercussion(0.8, 130.81, 0.1);  // Bass note
+            addPercussion(1.2, 130.81, 0.15); // Final bass
+            
+            return true;
+        } catch (error) {
+            console.log('Audio not supported or failed:', error);
+            return false;
+        }
+    }
+
+    // Create magical sparkle sound effect
+    createSparkleSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const createSparkle = (delay) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Random high frequency for sparkle effect
+                const freq = 800 + Math.random() * 1200;
+                oscillator.frequency.setValueAtTime(freq, audioContext.currentTime + delay);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 2, audioContext.currentTime + delay + 0.1);
+                
+                filter.type = 'highpass';
+                filter.frequency.setValueAtTime(400, audioContext.currentTime + delay);
+                
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime + delay);
+                gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + delay + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + delay + 0.15);
+                
+                oscillator.start(audioContext.currentTime + delay);
+                oscillator.stop(audioContext.currentTime + delay + 0.15);
+            };
+            
+            // Create multiple sparkles with slight delays
+            for (let i = 0; i < 8; i++) {
+                createSparkle(i * 0.1);
+            }
+            
+            return true;
+        } catch (error) {
+            console.log('Sparkle sound failed:', error);
+            return false;
         }
     }
 }

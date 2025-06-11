@@ -5,9 +5,9 @@
           ["Hola", "Ahoj", "ahoi"],
           ["Mucho gusto", "Těší mě", "tyeshi mnye"],
           ["¿Cómo te llamas?", "Jak se jmenuješ?", "yak se ymenuyesh"],
-          ["Me llamo Hanna", "Jmenuji se Hanna", "ymenuyi se Hanna"],
-          ["Me llamo Lenna", "Jmenuji se Lenna", "ymenuyi se Lenna"],
-          ["Me llamo Lukas", "Jmenuji se Lukas", "ymenuyi se Lukas"],
+          ["Me llamo Hanna", "Já jsem Hanna", "Yá sem Hanna"],
+          ["Me llamo Lenna", "Já jsem Lenna", "Yá sem Lenna"],
+          ["Me llamo Lukas", "Já jsem Lukas", "Yá sem Lukas"],
           ["¿Y tú?", "A ty?", "a ti"],
           ["¿Cuántos años tienes?", "Kolik ti je let?", "kolik ti ye let"],
           ["Tengo 11 años", "Je mi jedenáct let", "ye mi yednatst let", "Je mi 11 let"],
@@ -18,8 +18,8 @@
       {
         "section": "Cortesía y ayuda",
         "items": [
-          ["Buenos días", "Dobré ráno", "dobre ráno"],
-          ["Buenas tardes", "Dobrý den", "dobri den"],
+          ["Buen día", "Dobrý den", "dobri den"],
+          ["Buena noche", "Dobrý večer", "dobri vecher"],
           ["Buenas noches", "Dobrou noc", "dobrou nots"],
           ["Por favor", "Prosím", "proseem"],
           ["Gracias", "Děkuji", "dyekuyi"],

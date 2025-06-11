@@ -236,6 +236,29 @@ class CzechLearningCore {
         
         // Shuffle questions
         this.examQuestions = this.shuffleArray(this.examQuestions);
+        
+        // Check for URL parameter to limit questions (for testing)
+        const urlParams = new URLSearchParams(window.location.search);
+        const questionsParam = urlParams.get('questions');
+        
+        if (questionsParam) {
+            const questionsCount = parseInt(questionsParam, 10);
+            console.log('=== QUESTIONS PARAMETER DETECTED ===');
+            console.log('Original questions count:', this.examQuestions.length);
+            console.log('Requested questions count:', questionsParam);
+            console.log('Parsed questions count:', questionsCount);
+            
+            // Only limit if it's a valid positive number
+            if (!isNaN(questionsCount) && questionsCount > 0) {
+                const originalCount = this.examQuestions.length;
+                this.examQuestions = this.examQuestions.slice(0, questionsCount);
+                console.log('Limited questions to:', this.examQuestions.length);
+                console.log('Reduced from', originalCount, 'to', this.examQuestions.length, 'questions');
+            } else {
+                console.log('Invalid questions parameter, using all questions');
+            }
+            console.log('===================================');
+        }
     }
 
     generateOptions(correct, allPhrases, languageIndex) {
@@ -325,9 +348,18 @@ class CzechLearningCore {
 
     finishExam() {
         const correctAnswers = this.examAnswers.filter(answer => answer.isCorrect).length;
-        const incorrectAnswers = this.examAnswers.length - correctAnswers;
         const totalQuestions = this.examQuestions.length;
+        const incorrectAnswers = totalQuestions - correctAnswers;
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+        
+        console.log('=== EXAM FINISH DEBUG ===');
+        console.log('Total questions generated:', totalQuestions);
+        console.log('Total answers recorded:', this.examAnswers.length);
+        console.log('Correct answers:', correctAnswers);
+        console.log('Incorrect answers calculated:', incorrectAnswers);
+        console.log('Percentage:', percentage + '%');
+        console.log('Exam answers:', this.examAnswers);
+        console.log('========================');
         
         // Passing criteria: Only 90% or more correct answers
         const passedByPercentage = percentage >= 90;
@@ -740,6 +772,20 @@ class CzechLearningCore {
     }
 
     canTakeExam() {
+        // Check for URL parameter to bypass pronunciation requirements (for testing)
+        const urlParams = new URLSearchParams(window.location.search);
+        const questionsParam = urlParams.get('questions');
+        
+        if (questionsParam) {
+            const questionsCount = parseInt(questionsParam, 10);
+            if (!isNaN(questionsCount) && questionsCount > 0) {
+                console.log('=== TEST MODE DETECTED ===');
+                console.log('Bypassing pronunciation requirements due to questions parameter');
+                console.log('============================');
+                return true; // Allow exam for testing purposes
+            }
+        }
+        
         const sectionPhrases = this.phrases[this.currentSection].items;
         const scores = this.pronunciationScores[this.currentSection] || {};
         

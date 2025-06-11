@@ -645,16 +645,17 @@ main {
 
 .lesson-title {
     font-size: 2rem;
-    color: #2d3748;
+    color: white;
     margin-bottom: 0.5rem;
     font-weight: 600;
 }
 
 .exam-date {
     font-size: 1rem;
-    color: #718096;
+    color: white;
     margin-bottom: 2rem;
     font-style: italic;
+    font-weight: 500;
 }
 
 .result-summary {
@@ -787,6 +788,8 @@ main {
     .exam-date {
         font-size: 0.9rem;
         margin-bottom: 1.5rem;
+        color: #2d3748;
+        font-weight: 500;
     }
     
     .result-summary {
@@ -907,4 +910,803 @@ main {
 
 .student-name-modal button:active:not(:disabled) {
     transform: translateY(0);
+}
+
+/* Certificate Styles */
+.certificate-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    perspective: 1000px;
+}
+
+.certificate {
+    background: #ffffff;
+    width: 100%;
+    min-height: 600px; /* Remove fixed aspect ratio for desktop */
+    padding: 4rem;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        0 6px 20px rgba(0, 0, 0, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    transform: rotateX(2deg) rotateY(-1deg);
+    transition: transform 0.3s ease;
+}
+
+.certificate:hover {
+    transform: rotateX(0deg) rotateY(0deg);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.25),
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Paper texture overlay */
+.certificate::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 118, 117, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(102, 126, 234, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Paper grain effect */
+.certificate::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.005) 2px,
+            rgba(0, 0, 0, 0.005) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.005) 2px,
+            rgba(0, 0, 0, 0.005) 4px
+        );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.certificate-border {
+    border: 6px solid #2d3748;
+    border-radius: 0;
+    padding: 3rem;
+    position: relative;
+    background: transparent;
+    height: 100%;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.certificate-border::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border: 3px solid #667eea;
+    pointer-events: none;
+}
+
+.certificate-border::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    right: 25px;
+    bottom: 25px;
+    border: 1px solid #cbd5e0;
+    pointer-events: none;
+}
+
+.certificate-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+
+.certificate-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 1.5rem;
+}
+
+.certificate-seal {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.certificate-title {
+    font-size: 2.8rem;
+    color: #2d3748;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 3px;
+}
+
+.certificate-subtitle {
+    font-size: 1.3rem;
+    color: #667eea;
+    font-style: italic;
+    margin-bottom: 0;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-body {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem 0;
+}
+
+.certificate-text {
+    font-size: 1.3rem;
+    color: #4a5568;
+    margin: 0.8rem 0;
+    font-weight: 400;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-student-name {
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin: 1.5rem 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-family: 'Times New Roman', serif;
+    position: relative;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.certificate-student-name::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 2px;
+    background: #2d3748;
+    border-radius: 0;
+}
+
+.certificate-lesson {
+    font-size: 1.8rem;
+    color: #667eea;
+    margin: 1.5rem 0;
+    font-weight: 600;
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-achievement {
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin: 1.5rem 0;
+    line-height: 1.6;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-score {
+    font-size: 1.6rem;
+    color: #38a169;
+    font-weight: 700;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 3rem;
+    position: relative;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 2rem;
+}
+
+.certificate-date {
+    text-align: left;
+}
+
+.certificate-date-label {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-bottom: 0.5rem;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-date-value {
+    font-size: 1.1rem;
+    color: #2d3748;
+    font-weight: 600;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-signature {
+    text-align: center;
+}
+
+.certificate-signature-line {
+    width: 200px;
+    height: 1px;
+    background: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.certificate-signature-text {
+    font-size: 1.2rem;
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-family: 'Brush Script MT', cursive;
+    font-style: italic;
+}
+
+.certificate-signature-title {
+    font-size: 0.9rem;
+    color: #718096;
+    font-family: 'Times New Roman', serif;
+}
+
+.certificate-decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Corner decorative elements */
+.certificate-decorations::before {
+    content: '❦';
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    font-size: 1.5rem;
+    color: #cbd5e0;
+}
+
+.certificate-decorations::after {
+    content: '❦';
+    position: absolute;
+    top: 60px;
+    right: 60px;
+    font-size: 1.5rem;
+    color: #cbd5e0;
+}
+
+.certificate-star {
+    position: absolute;
+    font-size: 1rem;
+    color: #e2e8f0;
+}
+
+.star-1 {
+    bottom: 60px;
+    left: 60px;
+    content: '❦';
+}
+
+.star-2 {
+    bottom: 60px;
+    right: 60px;
+    content: '❦';
+}
+
+.certificate-actions {
+    text-align: center;
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.certificate-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    min-width: 200px;
+}
+
+.certificate-button:hover {
+    background: #5a67d8;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.certificate-button.primary {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.certificate-button.primary:hover {
+    background: linear-gradient(135deg, #38a169, #2f855a);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+}
+
+/* Certificate Dance Animations */
+.certificate.dancing {
+    animation: certificateDance 1.5s ease-in-out;
+}
+
+@keyframes certificateDance {
+    0% { transform: rotateX(2deg) rotateY(-1deg) scale(1); }
+    10% { transform: rotateX(-2deg) rotateY(2deg) scale(1.02) rotateZ(2deg); }
+    20% { transform: rotateX(3deg) rotateY(-3deg) scale(0.98) rotateZ(-3deg); }
+    30% { transform: rotateX(-3deg) rotateY(3deg) scale(1.03) rotateZ(3deg); }
+    40% { transform: rotateX(2deg) rotateY(-2deg) scale(0.97) rotateZ(-2deg); }
+    50% { transform: rotateX(-4deg) rotateY(4deg) scale(1.05) rotateZ(4deg); }
+    60% { transform: rotateX(3deg) rotateY(-3deg) scale(0.95) rotateZ(-3deg); }
+    70% { transform: rotateX(-2deg) rotateY(2deg) scale(1.04) rotateZ(2deg); }
+    80% { transform: rotateX(4deg) rotateY(-4deg) scale(0.96) rotateZ(-4deg); }
+    90% { transform: rotateX(-1deg) rotateY(1deg) scale(1.02) rotateZ(1deg); }
+    100% { transform: rotateX(2deg) rotateY(-1deg) scale(1); }
+}
+
+.certificate.dancing .certificate-seal {
+    animation: sealSpin 1.5s ease-in-out;
+}
+
+@keyframes sealSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(180deg) scale(1.2); }
+    50% { transform: rotate(360deg) scale(1.4); }
+    75% { transform: rotate(540deg) scale(1.2); }
+    100% { transform: rotate(720deg) scale(1); }
+}
+
+.certificate.dancing .certificate-student-name {
+    animation: nameGlow 1.5s ease-in-out;
+}
+
+@keyframes nameGlow {
+    0% { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); color: #2d3748; }
+    25% { text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(102, 126, 234, 0.4); color: #667eea; }
+    50% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6); color: #ffd700; }
+    75% { text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(102, 126, 234, 0.4); color: #667eea; }
+    100% { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); color: #2d3748; }
+}
+
+.certificate.dancing .certificate-star {
+    animation: starTwinkle 1.5s ease-in-out;
+}
+
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    25% { transform: scale(1.5) rotate(90deg); opacity: 0.8; }
+    50% { transform: scale(2) rotate(180deg); opacity: 0.6; }
+    75% { transform: scale(1.5) rotate(270deg); opacity: 0.8; }
+}
+
+.certificate.dancing .certificate-decorations::before,
+.certificate.dancing .certificate-decorations::after {
+    animation: cornerFlourish 1.5s ease-in-out;
+}
+
+@keyframes cornerFlourish {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.5) rotate(360deg); opacity: 0.7; color: #667eea; }
+}
+
+/* Add a subtle bounce to the entire container */
+.certificate-container.celebrating {
+    animation: containerBounce 0.6s ease-in-out;
+}
+
+@keyframes containerBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Cursor pointer to indicate clickability */
+.certificate {
+    cursor: pointer;
+    user-select: none;
+}
+
+.certificate:active {
+    transform: rotateX(2deg) rotateY(-1deg) scale(0.98);
+}
+
+/* Desktop Certificate Styles - Larger screens */
+@media (min-width: 1024px) {
+    .certificate-container {
+        max-width: 1000px;
+        padding: 2rem;
+    }
+    
+    .certificate {
+        padding: 4rem;
+        min-height: 650px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .certificate-border {
+        padding: 3rem;
+    }
+    
+    .certificate-title {
+        font-size: 3rem;
+        letter-spacing: 3px;
+    }
+    
+    .certificate-subtitle {
+        font-size: 1.4rem;
+    }
+    
+    .certificate-seal {
+        font-size: 3rem;
+    }
+    
+    .certificate-student-name {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+        margin: 1.5rem 0;
+    }
+    
+    .certificate-lesson {
+        font-size: 2rem;
+        margin: 1.5rem 0;
+    }
+    
+    .certificate-text {
+        font-size: 1.4rem;
+        margin: 1rem 0;
+    }
+    
+    .certificate-achievement {
+        font-size: 1.3rem;
+        margin: 1.5rem 0;
+    }
+    
+    .certificate-score {
+        font-size: 1.6rem;
+    }
+    
+    .certificate-footer {
+        margin-top: 3rem;
+        padding-top: 2rem;
+    }
+    
+    .certificate-signature-line {
+        width: 220px;
+    }
+    
+    .certificate-signature-text {
+        font-size: 1.3rem;
+    }
+    
+    .certificate-date-value {
+        font-size: 1.2rem;
+    }
+    
+    .certificate-actions {
+        margin-top: 2rem;
+    }
+    
+    .certificate-button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        min-width: 220px;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1023px) {
+    .certificate-container {
+        max-width: 800px;
+        padding: 2rem;
+    }
+    
+    .certificate {
+        padding: 3rem;
+    }
+    
+    .certificate-border {
+        padding: 2.5rem;
+    }
+    
+    .certificate-title {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .certificate-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .certificate-student-name {
+        font-size: 2.2rem;
+        letter-spacing: 3px;
+    }
+    
+    .certificate-lesson {
+        font-size: 1.6rem;
+    }
+}
+
+/* Certificate Mobile Responsiveness */
+@media (max-width: 768px) {
+    .certificate-container {
+        padding: 0.5rem;
+        max-width: 100%;
+    }
+    
+    .certificate {
+        padding: 1rem;
+        min-height: auto; /* Remove minimum height constraint */
+        transform: none;
+        margin: 0;
+        box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.15),
+            0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .certificate:hover {
+        transform: none;
+    }
+    
+    .certificate-border {
+        padding: 1rem;
+        border-width: 3px;
+        height: auto;
+    }
+    
+    .certificate-border::before {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border-width: 2px;
+    }
+    
+    .certificate-border::after {
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border-width: 1px;
+    }
+    
+    .certificate-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom-width: 1px;
+    }
+    
+    .certificate-seal {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .certificate-title {
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
+    }
+    
+    .certificate-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .certificate-body {
+        margin-bottom: 1.5rem;
+        padding: 0.5rem 0;
+    }
+    
+    .certificate-text {
+        font-size: 0.9rem;
+        margin: 0.3rem 0;
+        line-height: 1.4;
+    }
+    
+    .certificate-student-name {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        margin: 0.8rem 0;
+        line-height: 1.2;
+    }
+    
+    .certificate-student-name::after {
+        width: 80px;
+        bottom: -4px;
+        height: 1px;
+    }
+    
+    .certificate-lesson {
+        font-size: 1.1rem;
+        margin: 0.8rem 0;
+        line-height: 1.2;
+        word-break: break-word;
+    }
+    
+    .certificate-achievement {
+        font-size: 0.9rem;
+        margin: 0.8rem 0;
+        line-height: 1.3;
+    }
+    
+    .certificate-score {
+        font-size: 1.2rem;
+        display: inline-block;
+    }
+    
+    .certificate-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top-width: 1px;
+    }
+    
+    .certificate-date {
+        text-align: center;
+        order: 2;
+    }
+    
+    .certificate-date-label {
+        font-size: 0.7rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .certificate-date-value {
+        font-size: 0.8rem;
+    }
+    
+    .certificate-signature {
+        order: 1;
+    }
+    
+    .certificate-signature-line {
+        width: 120px;
+        margin: 0 auto 0.3rem;
+    }
+    
+    .certificate-signature-text {
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .certificate-signature-title {
+        font-size: 0.7rem;
+    }
+    
+    /* Hide decorative elements on mobile for cleaner look */
+    .certificate-decorations {
+        display: none;
+    }
+    
+    .certificate-actions {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+        gap: 0.75rem;
+    }
+    
+    .certificate-button {
+        width: 100%;
+        max-width: 280px;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .certificate-container {
+        padding: 0.25rem;
+    }
+    
+    .certificate {
+        padding: 0.75rem;
+    }
+    
+    .certificate-border {
+        padding: 0.75rem;
+        border-width: 2px;
+    }
+    
+    .certificate-border::before {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        border-width: 1px;
+    }
+    
+    .certificate-border::after {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        border-width: 1px;
+    }
+    
+    .certificate-title {
+        font-size: 1.4rem;
+        line-height: 1.1;
+    }
+    
+    .certificate-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .certificate-seal {
+        font-size: 1.8rem;
+    }
+    
+    .certificate-student-name {
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        margin: 0.6rem 0;
+    }
+    
+    .certificate-lesson {
+        font-size: 1rem;
+        margin: 0.6rem 0;
+    }
+    
+    .certificate-text,
+    .certificate-achievement {
+        font-size: 0.8rem;
+        margin: 0.4rem 0;
+    }
+    
+    .certificate-score {
+        font-size: 1.1rem;
+    }
+    
+    .certificate-date-label,
+    .certificate-signature-title {
+        font-size: 0.65rem;
+    }
+    
+    .certificate-date-value,
+    .certificate-signature-text {
+        font-size: 0.75rem;
+    }
+    
+    .certificate-button {
+        font-size: 0.85rem;
+        padding: 0.7rem 1.2rem;
+    }
 }
