@@ -720,42 +720,92 @@ class CzechLearningUI {
 
     renderExamResults(results) {
         const mainContent = document.getElementById('main-content');
-        const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
         
-        // Generate feedback message
-        let feedback = '';
+        // Check if we're in debug mode (questions parameter detected)
+        const urlParams = new URLSearchParams(window.location.search);
+        const isDebugMode = urlParams.get('questions') !== null;
+        
+        // Use "MODO DEBUG" if in debug mode, otherwise use real student name
+        const studentName = isDebugMode ? 'MODO DEBUG' : (window.app ? window.app.getStudentName() : 'Estudiante');
+        
         if (results.passed) {
-            feedback = `¡Excelente trabajo! Has aprobado con ${results.percentage}% de aciertos (necesitabas 90% o más).`;
+            // Certificate design for passed exam
+            mainContent.innerHTML = `
+                <div class="certificate-container">
+                    <div class="certificate">
+                        <div class="certificate-border">
+                            <div class="certificate-content">
+                                <div class="certificate-header">
+                                    <div class="certificate-seal">🏆</div>
+                                    <h1 class="certificate-title">Certificado de Aprobación</h1>
+                                    <div class="certificate-subtitle">Aprende Checo con Papá</div>
+                                </div>
+                                
+                                <div class="certificate-body">
+                                    <p class="certificate-text">Se certifica que</p>
+                                    <h2 class="certificate-student-name">${studentName}</h2>
+                                    <p class="certificate-text">ha completado exitosamente la lección</p>
+                                    <h3 class="certificate-lesson">"${results.lessonName}"</h3>
+                                    <p class="certificate-achievement">
+                                        con una calificación de <span class="certificate-score">${results.percentage}%</span>
+                                        <br>
+                                        (${results.correctAnswers}/${results.totalQuestions} respuestas correctas)
+                                    </p>
+                                </div>
+                                
+                                <div class="certificate-footer">
+                                    <div class="certificate-date">
+                                        <div class="certificate-date-label">Fecha de Aprobación</div>
+                                        <div class="certificate-date-value">${results.examDate}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="certificate-decorations">
+                                    <div class="certificate-star star-1">⭐</div>
+                                    <div class="certificate-star star-2">⭐</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="certificate-actions">
+                        <button class="certificate-button" id="back-to-practice">
+                            📚 Volver a Practicar
+                        </button>
+                        ${results.canAdvance ? 
+                            `<button class="certificate-button primary" id="continue-next">
+                                🚀 Continuar a la Siguiente Lección
+                            </button>` : 
+                            ''
+                        }
+                    </div>
+                </div>
+            `;
         } else {
-            feedback = `Para aprobar necesitas 90% de aciertos o más. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+            // Regular failure screen
+            const feedback = `Para aprobar necesitas 90% de aciertos o más. Obtuviste ${results.percentage}% con ${results.incorrectAnswers} errores. ¡Sigue practicando!`;
+            
+            mainContent.innerHTML = `
+                <div class="exam-results">
+                    <h2 class="lesson-title">${results.lessonName}</h2>
+                    <div class="exam-date">${results.examDate}</div>
+                    
+                    <div class="result-summary">
+                        ${studentName}, lograste ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%).
+                    </div>
+                    
+                    <div class="feedback failure">
+                        ${feedback}
+                    </div>
+                    
+                    <div class="result-buttons">
+                        <button class="result-button" id="back-to-practice">
+                            Volver a Practicar
+                        </button>
+                    </div>
+                </div>
+            `;
         }
-        
-        mainContent.innerHTML = `
-            <div class="exam-results">
-                <h2 class="lesson-title">${results.lessonName}</h2>
-                <div class="exam-date">${results.examDate}</div>
-                
-                <div class="result-summary">
-                    ${studentName}, lograste ${results.correctAnswers}/${results.totalQuestions} (${results.percentage}%).
-                </div>
-                
-                <div class="feedback ${results.passed ? 'success' : 'failure'}">
-                    ${feedback}
-                </div>
-                
-                <div class="result-buttons">
-                    <button class="result-button" id="back-to-practice">
-                        Volver a Practicar
-                    </button>
-                    ${results.canAdvance ? 
-                        `<button class="result-button success" id="continue-next">
-                            Continuar a la Siguiente Lección
-                        </button>` : 
-                        ''
-                    }
-                </div>
-            </div>
-        `;
         
         // Add event listeners
         document.getElementById('back-to-practice').addEventListener('click', () => {
@@ -764,9 +814,12 @@ class CzechLearningUI {
         });
         
         if (results.canAdvance) {
-            document.getElementById('continue-next').addEventListener('click', () => {
-                this.core.unlockNextSection();
-            });
+            const continueButton = document.getElementById('continue-next');
+            if (continueButton) {
+                continueButton.addEventListener('click', () => {
+                    this.core.unlockNextSection();
+                });
+            }
         }
     }
 
