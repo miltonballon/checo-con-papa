@@ -821,6 +821,39 @@ class CzechLearningUI {
                 });
             }
         }
+        
+        // Add certificate dance functionality (only if passed)
+        if (results.passed) {
+            const certificate = document.querySelector('.certificate');
+            const certificateContainer = document.querySelector('.certificate-container');
+            
+            if (certificate) {
+                certificate.addEventListener('click', () => {
+                    // Remove any existing animation classes
+                    certificate.classList.remove('dancing');
+                    certificateContainer.classList.remove('celebrating');
+                    
+                    // Force reflow to restart animation
+                    certificate.offsetHeight;
+                    
+                    // Add animation classes
+                    certificate.classList.add('dancing');
+                    certificateContainer.classList.add('celebrating');
+                    
+                    // Remove animation classes after animation completes
+                    setTimeout(() => {
+                        certificate.classList.remove('dancing');
+                        certificateContainer.classList.remove('celebrating');
+                    }, 1500);
+                    
+                    // Add a fun sound effect placeholder (you could add actual audio later)
+                    console.log('🎉 ¡El certificado está bailando! 🎉');
+                });
+                
+                // Add a subtle hint that the certificate is clickable
+                certificate.title = "¡Haz clic para hacer bailar el certificado! 🕺💃";
+            }
+        }
     }
 
     playAudio(text) {

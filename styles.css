@@ -1260,6 +1260,90 @@ main {
     box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
 }
 
+/* Certificate Dance Animations */
+.certificate.dancing {
+    animation: certificateDance 1.5s ease-in-out;
+}
+
+@keyframes certificateDance {
+    0% { transform: rotateX(2deg) rotateY(-1deg) scale(1); }
+    10% { transform: rotateX(-2deg) rotateY(2deg) scale(1.02) rotateZ(2deg); }
+    20% { transform: rotateX(3deg) rotateY(-3deg) scale(0.98) rotateZ(-3deg); }
+    30% { transform: rotateX(-3deg) rotateY(3deg) scale(1.03) rotateZ(3deg); }
+    40% { transform: rotateX(2deg) rotateY(-2deg) scale(0.97) rotateZ(-2deg); }
+    50% { transform: rotateX(-4deg) rotateY(4deg) scale(1.05) rotateZ(4deg); }
+    60% { transform: rotateX(3deg) rotateY(-3deg) scale(0.95) rotateZ(-3deg); }
+    70% { transform: rotateX(-2deg) rotateY(2deg) scale(1.04) rotateZ(2deg); }
+    80% { transform: rotateX(4deg) rotateY(-4deg) scale(0.96) rotateZ(-4deg); }
+    90% { transform: rotateX(-1deg) rotateY(1deg) scale(1.02) rotateZ(1deg); }
+    100% { transform: rotateX(2deg) rotateY(-1deg) scale(1); }
+}
+
+.certificate.dancing .certificate-seal {
+    animation: sealSpin 1.5s ease-in-out;
+}
+
+@keyframes sealSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(180deg) scale(1.2); }
+    50% { transform: rotate(360deg) scale(1.4); }
+    75% { transform: rotate(540deg) scale(1.2); }
+    100% { transform: rotate(720deg) scale(1); }
+}
+
+.certificate.dancing .certificate-student-name {
+    animation: nameGlow 1.5s ease-in-out;
+}
+
+@keyframes nameGlow {
+    0% { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); color: #2d3748; }
+    25% { text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(102, 126, 234, 0.4); color: #667eea; }
+    50% { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6); color: #ffd700; }
+    75% { text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(102, 126, 234, 0.4); color: #667eea; }
+    100% { text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); color: #2d3748; }
+}
+
+.certificate.dancing .certificate-star {
+    animation: starTwinkle 1.5s ease-in-out;
+}
+
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    25% { transform: scale(1.5) rotate(90deg); opacity: 0.8; }
+    50% { transform: scale(2) rotate(180deg); opacity: 0.6; }
+    75% { transform: scale(1.5) rotate(270deg); opacity: 0.8; }
+}
+
+.certificate.dancing .certificate-decorations::before,
+.certificate.dancing .certificate-decorations::after {
+    animation: cornerFlourish 1.5s ease-in-out;
+}
+
+@keyframes cornerFlourish {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.5) rotate(360deg); opacity: 0.7; color: #667eea; }
+}
+
+/* Add a subtle bounce to the entire container */
+.certificate-container.celebrating {
+    animation: containerBounce 0.6s ease-in-out;
+}
+
+@keyframes containerBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Cursor pointer to indicate clickability */
+.certificate {
+    cursor: pointer;
+    user-select: none;
+}
+
+.certificate:active {
+    transform: rotateX(2deg) rotateY(-1deg) scale(0.98);
+}
+
 /* Desktop Certificate Styles - Larger screens */
 @media (min-width: 1024px) {
     .certificate-container {
