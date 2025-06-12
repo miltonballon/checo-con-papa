@@ -542,7 +542,9 @@ class CzechLearningUI {
             `Buena pronunciación, ${studentName}. ¡Sigue practicando! 💪` : 
             `Sigue intentando, ${studentName}. ¡Tú puedes! 🎯`;
             
-        this.showNotification(`${feedbackMessage} (${result.accuracy}%)${confidenceInfo}`);
+        // Include what was recognized in the notification
+        const recognizedText = result.transcript ? ` - Reconocido: "${result.transcript}"` : '';
+        this.showNotification(`${feedbackMessage} (${result.accuracy}%)${confidenceInfo}${recognizedText}`);
         
         console.log('=== PRONUNCIATION RESULT UI ===');
         console.log('📊 Accuracy:', result.accuracy + '%');
