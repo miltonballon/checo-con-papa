@@ -13,6 +13,9 @@ class CzechLearningCore {
         this.examMode = false;
         this.examType = null; // 'spanish-to-czech' or 'czech-to-spanish'
         
+        // Configuration - will be loaded from config.json
+        this.config = null;
+        
         // Pronunciation tracking
         this.pronunciationScores = {}; // sectionIndex -> { phraseIndex: score }
         this.recognition = null;
@@ -36,6 +39,10 @@ class CzechLearningCore {
     async init() {
         console.log('CzechLearningCore init starting...');
         try {
+            console.log('Loading configuration...');
+            await this.loadConfig();
+            console.log('Configuration loaded successfully');
+            
             console.log('Loading phrases...');
             await this.loadPhrases();
             console.log('Phrases loaded:', this.phrases.length, 'sections');
@@ -66,6 +73,40 @@ class CzechLearningCore {
         } catch (error) {
             console.error('Error in CzechLearningCore init:', error);
             throw error;
+        }
+    }
+
+    async loadConfig() {
+        try {
+            const response = await fetch('config.json');
+            if (!response.ok) {
+                throw new Error(`Failed to load config: ${response.status}`);
+            }
+            this.config = await response.json();
+            console.log('Configuration loaded:', this.config);
+        } catch (error) {
+            console.warn('Failed to load config.json, using default values:', error);
+            // Fallback to default configuration
+            this.config = {
+                pronunciation: {
+                    thresholds: {
+                        excellent: 89,
+                        good: 70,
+                        needsImprovement: 0
+                    },
+                    examRequirement: 89,
+                    timeout: 5000,
+                    language: "cs-CZ"
+                },
+                exam: {
+                    passingPercentage: 90,
+                    questionsPerSection: 10
+                },
+                ui: {
+                    autoAdvanceDelay: 1000,
+                    notificationDuration: 4000
+                }
+            };
         }
     }
 
@@ -144,6 +185,15 @@ class CzechLearningCore {
             this.phrases = await response.json();
         } catch (error) {
             console.error('Error loading phrases:', error);
+        }
+    }
+
+    async loadConfig() {
+        try {
+            const response = await fetch('./config.json');
+            this.config = await response.json();
+        } catch (error) {
+            console.error('Error loading configuration:', error);
         }
     }
 
@@ -474,7 +524,7 @@ class CzechLearningCore {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             this.recognition = new SpeechRecognition();
-            this.recognition.lang = 'cs-CZ';
+            this.recognition.lang = this.config?.pronunciation?.language || 'cs-CZ';
             this.recognition.interimResults = false;
             this.recognition.maxAlternatives = 1;
             this.recognition.continuous = false;
@@ -792,10 +842,13 @@ class CzechLearningCore {
         const sectionPhrases = this.phrases[this.currentSection].items;
         const scores = this.pronunciationScores[this.currentSection] || {};
         
-        // Check if all phrases have pronunciation scores >= 90%
+        // Get pronunciation requirement from config
+        const requiredScore = this.config?.pronunciation?.examRequirement || 89;
+        
+        // Check if all phrases have pronunciation scores >= required threshold
         for (let i = 0; i < sectionPhrases.length; i++) {
             const score = scores[i] || 0;
-            if (score < 90) {
+            if (score < requiredScore) {
                 return false;
             }
         }
@@ -821,5 +874,22 @@ class CzechLearningCore {
             console.error('Error loading pronunciation progress:', error);
             this.pronunciationScores = {};
         }
+    }
+
+    // Get configuration values
+    getConfig() {
+        return this.config;
+    }
+
+    getPronunciationThresholds() {
+        return this.config?.pronunciation?.thresholds || {
+            excellent: 89,
+            good: 70,
+            needsImprovement: 0
+        };
+    }
+
+    getPronunciationExamRequirement() {
+        return this.config?.pronunciation?.examRequirement || 89;
     }
 }

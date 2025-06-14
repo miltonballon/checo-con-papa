@@ -337,6 +337,7 @@ class CzechLearningUI {
         const mainContent = document.getElementById('main-content');
         const canTakeExam = this.core.canTakeExam();
         const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        const examRequirement = this.core.getPronunciationExamRequirement();
         
         mainContent.innerHTML = `
             <div class="section-content">
@@ -346,7 +347,7 @@ class CzechLearningUI {
                 </div>
                 <div class="exam-requirements">
                     ${!canTakeExam ? 
-                        `<div class="requirement-message">⚠️ ${studentName}, debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.</div>` : 
+                        `<div class="requirement-message">⚠️ ${studentName}, debes lograr una pronunciación de al menos ${examRequirement}% en todas las frases para poder tomar el examen.</div>` : 
                         `<div class="requirement-message success">✅ ¡Excelente, ${studentName}! Has completado todos los requisitos de pronunciación.</div>`
                     }
                 </div>
@@ -390,7 +391,8 @@ class CzechLearningUI {
     renderPhraseCard(phrase, phraseIndex) {
         const [spanish, czech, pronunciation] = phrase;
         const pronunciationScore = this.core.getPronunciationScore(this.core.currentSection, phraseIndex);
-        const scoreClass = pronunciationScore >= 90 ? 'excellent' : pronunciationScore >= 70 ? 'good' : pronunciationScore > 0 ? 'needs-improvement' : 'not-attempted';
+        const thresholds = this.core.getPronunciationThresholds();
+        const scoreClass = pronunciationScore >= thresholds.excellent ? 'excellent' : pronunciationScore >= thresholds.good ? 'good' : pronunciationScore > 0 ? 'needs-improvement' : 'not-attempted';
         
         return `
             <div class="phrase-card" data-phrase-index="${phraseIndex}">
@@ -479,10 +481,11 @@ class CzechLearningUI {
         
         this.core.startPronunciation(this.core.currentSection, phraseIndex);
         
-        // Auto-stop recording after 5 seconds
+        // Auto-stop recording after configured timeout
+        const timeoutMs = this.core.getConfig()?.pronunciation?.timeout || 5000;
         this.recordingTimeout = setTimeout(() => {
             if (this.core.isRecording && this.core.recognition) {
-                console.log('Auto-stopping recording after 5 seconds');
+                console.log(`Auto-stopping recording after ${timeoutMs/1000} seconds`);
                 this.core.recognition.stop();
                 
                 // If no result was detected, show timeout message
@@ -496,7 +499,7 @@ class CzechLearningUI {
                     }
                 }, 500);
             }
-        }, 5000);
+        }, timeoutMs);
     }
 
     handlePronunciationResult(result) {
@@ -526,7 +529,8 @@ class CzechLearningUI {
         const phraseCard = document.querySelector(`[data-phrase-index="${result.phraseIndex}"]`);
         if (phraseCard) {
             const scoreElement = phraseCard.querySelector('.pronunciation-score');
-            const scoreClass = result.accuracy >= 90 ? 'excellent' : result.accuracy >= 70 ? 'good' : 'needs-improvement';
+            const thresholds = this.core.getPronunciationThresholds();
+            const scoreClass = result.accuracy >= thresholds.excellent ? 'excellent' : result.accuracy >= thresholds.good ? 'good' : 'needs-improvement';
             
             scoreElement.className = `pronunciation-score ${scoreClass}`;
             scoreElement.textContent = `${result.accuracy}%`;
@@ -535,10 +539,11 @@ class CzechLearningUI {
         // Show feedback message
         const confidenceInfo = result.confidence ? ` (Confianza: ${result.confidence.toFixed(1)}%)` : '';
         const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
+        const thresholds = this.core.getPronunciationThresholds();
         
-        const feedbackMessage = result.accuracy >= 90 ? 
+        const feedbackMessage = result.accuracy >= thresholds.excellent ? 
             `¡Excelente pronunciación, ${studentName}! 🌟` : 
-            result.accuracy >= 70 ? 
+            result.accuracy >= thresholds.good ? 
             `Buena pronunciación, ${studentName}. ¡Sigue practicando! 💪` : 
             `Sigue intentando, ${studentName}. ¡Tú puedes! 🎯`;
             
@@ -566,12 +571,13 @@ class CzechLearningUI {
             }
             
             if (requirementMessage) {
+                const examRequirement = this.core.getPronunciationExamRequirement();
                 if (canTakeExam) {
                     requirementMessage.className = 'requirement-message success';
                     requirementMessage.innerHTML = `✅ ¡Excelente, ${studentName}! Has completado todos los requisitos de pronunciación.`;
                 } else {
                     requirementMessage.className = 'requirement-message';
-                    requirementMessage.innerHTML = `⚠️ ${studentName}, debes lograr una pronunciación de al menos 90% en todas las frases para poder tomar el examen.`;
+                    requirementMessage.innerHTML = `⚠️ ${studentName}, debes lograr una pronunciación de al menos ${examRequirement}% en todas las frases para poder tomar el examen.`;
                 }
             }
         }, 100);

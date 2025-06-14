@@ -1,0 +1,20 @@
+{
+  "pronunciation": {
+    "thresholds": {
+      "excellent": 89,
+      "good": 70,
+      "needsImprovement": 0
+    },
+    "examRequirement": 89,
+    "timeout": 5000,
+    "language": "cs-CZ"
+  },
+  "exam": {
+    "passingPercentage": 90,
+    "questionsPerSection": 10
+  },
+  "ui": {
+    "autoAdvanceDelay": 1000,
+    "notificationDuration": 4000
+  }
+}
