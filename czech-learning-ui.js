@@ -13,6 +13,15 @@ class CzechLearningUI {
         this.headerHeight = 0;
         this.isMinimized = false; // Track if header is minimized (manual or automatic)
         
+        // Tracking for pronunciation streaks
+        this.pronunciationStreak = 0;
+        
+        // Tracking for exam answer streaks
+        this.examAnswerStreak = 0;
+        
+        // Initialize celebration effects
+        this.celebrationEffects = new CelebrationEffects();
+        
         // Set up event callbacks
         console.log('Setting up core callbacks...');
         this.setupCoreCallbacks();
@@ -332,6 +341,9 @@ class CzechLearningUI {
     }
 
     renderSection(sectionIndex, sectionData) {
+        // Reset pronunciation streak when changing sections
+        this.pronunciationStreak = 0;
+        
         this.renderNavigation(); // Update navigation to reflect current section
         
         const mainContent = document.getElementById('main-content');
@@ -522,14 +534,34 @@ class CzechLearningUI {
         
         if (result.error) {
             this.showNotification(result.message);
+            // Reset pronunciation streak on error
+            this.pronunciationStreak = 0;
             return;
+        }
+        
+        // Get thresholds for checking success
+        const thresholds = this.core.getPronunciationThresholds();
+        const wasSuccessful = result.accuracy >= thresholds.good;
+        
+        // Update pronunciation streak counter
+        if (wasSuccessful) {
+            this.pronunciationStreak++;
+            console.log(`🎯 Racha de pronunciación: ${this.pronunciationStreak}`);
+            
+            // Check if streak reached 3
+            if (this.pronunciationStreak === 3) {
+                console.log('🎉 ¡Racha de 3 pronunciaciones correctas!');
+                this.celebrationEffects.playCelebration('streak');
+            }
+        } else {
+            // Reset streak on unsuccessful attempt
+            this.pronunciationStreak = 0;
         }
         
         // Update the score display for this phrase
         const phraseCard = document.querySelector(`[data-phrase-index="${result.phraseIndex}"]`);
         if (phraseCard) {
             const scoreElement = phraseCard.querySelector('.pronunciation-score');
-            const thresholds = this.core.getPronunciationThresholds();
             const scoreClass = result.accuracy >= thresholds.excellent ? 'excellent' : result.accuracy >= thresholds.good ? 'good' : 'needs-improvement';
             
             scoreElement.className = `pronunciation-score ${scoreClass}`;
@@ -539,7 +571,6 @@ class CzechLearningUI {
         // Show feedback message
         const confidenceInfo = result.confidence ? ` (Confianza: ${result.confidence.toFixed(1)}%)` : '';
         const studentName = window.app ? window.app.getStudentName() : 'Estudiante';
-        const thresholds = this.core.getPronunciationThresholds();
         
         const feedbackMessage = result.accuracy >= thresholds.excellent ? 
             `¡Excelente pronunciación, ${studentName}! 🌟` : 
@@ -559,6 +590,7 @@ class CzechLearningUI {
             console.log('📈 Speech confidence:', result.confidence.toFixed(1) + '%');
         }
         console.log('===============================');
+        
         // Check if exam button should be enabled
         setTimeout(() => {
             const canTakeExam = this.core.canTakeExam();
@@ -568,6 +600,12 @@ class CzechLearningUI {
             
             if (examButton) {
                 examButton.disabled = !canTakeExam;
+                
+                // If exam was just enabled, show celebration
+                if (canTakeExam && examButton.hasAttribute('disabled')) {
+                    console.log('🎉 ¡Examen habilitado! Mostrando celebración');
+                    this.celebrationEffects.playCelebration('exam');
+                }
             }
             
             if (requirementMessage) {
@@ -584,6 +622,9 @@ class CzechLearningUI {
     }
 
     renderExamStart(totalQuestions) {
+        // Reset exam answer streak counter
+        this.examAnswerStreak = 0;
+        
         // This method can be used to show a loading state or transition
         // For now, the first question will be shown immediately
     }
@@ -665,6 +706,21 @@ class CzechLearningUI {
             return;
         }
         
+        // Track exam answer streaks
+        if (result.isCorrect) {
+            this.examAnswerStreak++;
+            console.log(`📊 Racha de respuestas correctas en examen: ${this.examAnswerStreak}`);
+            
+            // Celebrate on streaks of 3, 5, and 7 correct answers
+            if (this.examAnswerStreak === 3 || this.examAnswerStreak === 5 || this.examAnswerStreak === 7) {
+                console.log(`🎉 ¡Racha de ${this.examAnswerStreak} respuestas correctas en el examen!`);
+                this.celebrationEffects.playCelebration('examStreak');
+            }
+        } else {
+            // Reset streak on incorrect answer
+            this.examAnswerStreak = 0;
+        }
+        
         // Auto-play audio for Czech options (spanish-to-czech questions)
         if (question.type === 'spanish-to-czech') {
             this.playAudio(selectedOption);
@@ -739,6 +795,9 @@ class CzechLearningUI {
         const studentName = isDebugMode ? 'MODO DEBUG' : (window.app ? window.app.getStudentName() : 'Estudiante');
         
         if (results.passed) {
+            // Play celebration for passing the exam
+            this.celebrationEffects.playCelebration('examPassed');
+            
             // Certificate design for passed exam
             mainContent.innerHTML = `
                 <div class="certificate-container">
